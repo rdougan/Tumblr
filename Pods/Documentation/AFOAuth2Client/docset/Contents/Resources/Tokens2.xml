@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/AFOAuthAccount.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/AFOAuthAccount</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>AFOAuth2Client.h</DeclaredIn>
+			
+			<NodeRef refid="2"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/AFOAuthAccount/setUsername:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>AFOAuth2Client.h</DeclaredIn>			
+			
+			<Declaration>@property (readonly, nonatomic, copy) NSString *username</Declaration>
+			
+			
+			<Anchor>//api/name/username</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/AFOAuthAccount/username</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>AFOAuth2Client.h</DeclaredIn>			
+			
+			<Declaration>@property (readonly, nonatomic, copy) NSString *username</Declaration>
+			
+			
+			<Anchor>//api/name/username</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/AFOAuthAccount/setServiceProviderIdentifier:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>AFOAuth2Client.h</DeclaredIn>			
+			
+			<Declaration>@property (readonly, nonatomic, copy) NSString *serviceProviderIdentifier</Declaration>
+			
+			
+			<Anchor>//api/name/serviceProviderIdentifier</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/AFOAuthAccount/serviceProviderIdentifier</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>AFOAuth2Client.h</DeclaredIn>			
+			
+			<Declaration>@property (readonly, nonatomic, copy) NSString *serviceProviderIdentifier</Declaration>
+			
+			
+			<Anchor>//api/name/serviceProviderIdentifier</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/AFOAuthAccount/setCredential:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>AFOAuth2Client.h</DeclaredIn>			
+			
+			<Declaration>@property (readonly, nonatomic, retain) AFOauthAccountCredential *credential</Declaration>
+			
+			
+			<Anchor>//api/name/credential</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/AFOAuthAccount/credential</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>AFOAuth2Client.h</DeclaredIn>			
+			
+			<Declaration>@property (readonly, nonatomic, retain) AFOauthAccountCredential *credential</Declaration>
+			
+			
+			<Anchor>//api/name/credential</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/AFOAuthAccount/accountWithUsername:serviceProviderIdentifier:credential:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>AFOAuth2Client.h</DeclaredIn>			
+			
+			<Declaration>+ (id)accountWithUsername:(NSString *)username serviceProviderIdentifier:(NSString *)identifier credential:(AFOauthAccountCredential *)credential</Declaration>
+			
+			
+			<Anchor>//api/name/accountWithUsername:serviceProviderIdentifier:credential:</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/AFOAuthAccount/initWithUsername:serviceProviderIdentifier:credential:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>AFOAuth2Client.h</DeclaredIn>			
+			
+			<Declaration>- (id)initWithUsername:(NSString *)username serviceProviderIdentifier:(NSString *)identifier credential:(AFOauthAccountCredential *)credential</Declaration>
+			
+			
+			<Anchor>//api/name/initWithUsername:serviceProviderIdentifier:credential:</Anchor>
+		</Token>
+		
+	</File>
+</Tokens>

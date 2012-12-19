@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/AFOAuth2Client.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/AFOAuth2Client</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>AFOAuth2Client.h</DeclaredIn>
+			
+			<NodeRef refid="1"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/AFOAuth2Client/setServiceProviderIdentifier:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>AFOAuth2Client.h</DeclaredIn>			
+			
+			<Declaration>@property (readonly, nonatomic, copy) NSString *serviceProviderIdentifier</Declaration>
+			
+			
+			<Anchor>//api/name/serviceProviderIdentifier</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/AFOAuth2Client/serviceProviderIdentifier</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>AFOAuth2Client.h</DeclaredIn>			
+			
+			<Declaration>@property (readonly, nonatomic, copy) NSString *serviceProviderIdentifier</Declaration>
+			
+			
+			<Anchor>//api/name/serviceProviderIdentifier</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/AFOAuth2Client/authenticateUsingOAuthWithPath:username:password:clientID:secret:success:failure:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>AFOAuth2Client.h</DeclaredIn>			
+			
+			<Declaration>- (void)authenticateUsingOAuthWithPath:(NSString *)path username:(NSString *)username password:(NSString *)password clientID:(NSString *)clientID secret:(NSString *)secret success:(void ( ^ ) ( AFOAuthAccount *account ))success failure:(void ( ^ ) ( NSError *error ))failure</Declaration>
+			
+			
+			<Anchor>//api/name/authenticateUsingOAuthWithPath:username:password:clientID:secret:success:failure:</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/AFOAuth2Client/authenticateUsingOAuthWithPath:refreshToken:clientID:secret:success:failure:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>AFOAuth2Client.h</DeclaredIn>			
+			
+			<Declaration>- (void)authenticateUsingOAuthWithPath:(NSString *)path refreshToken:(NSString *)refreshToken clientID:(NSString *)clientID secret:(NSString *)secret success:(void ( ^ ) ( AFOAuthAccount *account ))success failure:(void ( ^ ) ( NSError *error ))failure</Declaration>
+			
+			
+			<Anchor>//api/name/authenticateUsingOAuthWithPath:refreshToken:clientID:secret:success:failure:</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/AFOAuth2Client/authenticateUsingOAuthWithPath:parameters:success:failure:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>AFOAuth2Client.h</DeclaredIn>			
+			
+			<Declaration>- (void)authenticateUsingOAuthWithPath:(NSString *)path parameters:(NSDictionary *)parameters success:(void ( ^ ) ( AFOAuthAccount *account ))success failure:(void ( ^ ) ( NSError *error ))failure</Declaration>
+			
+			
+			<Anchor>//api/name/authenticateUsingOAuthWithPath:parameters:success:failure:</Anchor>
+		</Token>
+		
+	</File>
+</Tokens>
