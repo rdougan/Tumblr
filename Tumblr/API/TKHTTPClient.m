@@ -178,14 +178,9 @@
     }];
 }
 
-- (void)dashboardForUser:(TKUser *)user success:(TumblrHTTPClientSuccess)success failure:(TumblrHTTPClientFailure)failure
-{
-    [self dashboardForUser:user offset:0 success:success failure:failure];
-}
-
 - (void)dashboardForUser:(TKUser *)user offset:(int)offset success:(TumblrHTTPClientSuccess)success failure:(TumblrHTTPClientFailure)failure
 {
-    NSDictionary *paramaters = @{@"offset" : [NSString stringWithFormat:@"%i", offset]};
+    NSDictionary *paramaters = @{@"offset" : [NSString stringWithFormat:@"%i", offset], @"reblog_info" : @"true"};
     
     [self getPath:@"user/dashboard" parameters:paramaters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         __weak NSManagedObjectContext *context = [TKUser mainContext];
@@ -194,8 +189,38 @@
             NSArray *posts = [responseObject valueForKeyPath:@"response.posts"];
             for (NSDictionary *postDictionary in posts) {
 				TKPost *post = [TKPost objectWithDictionary:postDictionary];
-				post.user = user;
+				[post setDashboardUser:user];
 			}
+            
+			[context save:nil];
+        }];
+        
+        if (success) {
+            success((AFJSONRequestOperation *)operation, responseObject);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (failure) {
+            failure((AFJSONRequestOperation *)operation, error);
+        }
+    }];
+}
+
+- (void)likesForUser:(TKUser *)user offset:(int)offset success:(TumblrHTTPClientSuccess)success failure:(TumblrHTTPClientFailure)failure
+{
+    NSDictionary *paramaters = @{@"offset" : [NSString stringWithFormat:@"%i", offset], @"reblog_info" : @"true"};
+    
+    [self getPath:@"user/likes" parameters:paramaters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        __weak NSManagedObjectContext *context = [TKUser mainContext];
+        [context performBlockAndWait:^{
+            // Get all the posts
+            NSArray *posts = [responseObject valueForKeyPath:@"response.liked_posts"];
+            for (NSDictionary *postDictionary in posts) {
+				TKPost *post = [TKPost objectWithDictionary:postDictionary];
+				[post setLikedUser:user];
+			}
+            
+            // Updae the user likes count
+            [user setLikesCount:[NSNumber numberWithInt:[[responseObject valueForKeyPath:@"response.liked_count"] intValue]]];
             
 			[context save:nil];
         }];
@@ -220,7 +245,7 @@
 - (void)postsForBlog:(TKBlog *)blog offset:(int)offset success:(TumblrHTTPClientSuccess)success failure:(TumblrHTTPClientFailure)failure
 {
     NSString *path = [NSString stringWithFormat:@"blog/%@/posts", [blog hostname]];
-    NSDictionary *paramaters = @{@"offset" : [NSString stringWithFormat:@"%i", offset]};
+    NSDictionary *paramaters = @{@"offset" : [NSString stringWithFormat:@"%i", offset], @"reblog_info" : @"true"};
     
     [self getPath:path parameters:paramaters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         __weak NSManagedObjectContext *context = [TKUser mainContext];
@@ -306,7 +331,7 @@
             
         case TKPostTypeChat:
             [parameters setObject:[post title] forKey:@"title"];
-            // TODO dialogue
+            [parameters setObject:[post body] forKey:@"conversation"];
             break;
             
         case TKPostTypeAudio:

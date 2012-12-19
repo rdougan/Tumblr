@@ -25,8 +25,20 @@
 @property (nonatomic, retain) NSString *state;
 @property (nonatomic, retain) NSNumber *liked;
 @property (nonatomic, retain) NSDate *createdAt;
+
 @property (nonatomic, retain) TKBlog *blog;
 @property (nonatomic, retain) TKUser *user;
+@property (nonatomic, retain) TKUser *dashboardUser;
+@property (nonatomic, retain) TKUser *likedUser;
+
+// Reblogged information
+@property (nonatomic, retain) NSNumber *rebloggedFromId;
+@property (nonatomic, retain) NSString *rebloggedFromName;
+@property (nonatomic, retain) NSString *rebloggedFromTitle;
+@property (nonatomic, retain) NSString *rebloggedFromURL;
+@property (nonatomic, retain) NSString *rebloggedRootName;
+@property (nonatomic, retain) NSString *rebloggedRootTitle;
+@property (nonatomic, retain) NSString *rebloggedRootURL;
 
 // Text
 @property (nonatomic, retain) NSString *title;
@@ -72,6 +84,8 @@
 @property (nonatomic, retain) NSString *askingURL;
 @property (nonatomic, retain) NSString *question;
 @property (nonatomic, retain) NSString *answer;
+
+- (BOOL)isReblogged;
 
 - (void)createWithSuccess:(void(^)(void))success failure:(void(^)(AFJSONRequestOperation *remoteOperation, NSError *error))failure;
 

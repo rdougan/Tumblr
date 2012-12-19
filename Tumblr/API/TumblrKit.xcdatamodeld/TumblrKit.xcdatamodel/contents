@@ -14,6 +14,7 @@
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="followedUser" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="TKUser" inverseName="following" inverseEntity="TKUser" syncable="YES"/>
         <relationship name="posts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TKPost" inverseName="blog" inverseEntity="TKPost" syncable="YES"/>
         <relationship name="user" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="TKUser" inverseName="blogs" inverseEntity="TKUser" syncable="YES"/>
     </entity>
@@ -53,6 +54,13 @@
         <attribute name="plays" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="postURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="question" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="rebloggedFromId" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="rebloggedFromName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="rebloggedFromTitle" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="rebloggedFromURL" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="rebloggedRootName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="rebloggedRootTitle" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="rebloggedRootURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="reblogKey" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="remoteID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="source" optional="YES" attributeType="String" syncable="YES"/>
@@ -70,17 +78,22 @@
         <attribute name="width" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="year" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <relationship name="blog" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="TKBlog" inverseName="posts" inverseEntity="TKBlog" syncable="YES"/>
+        <relationship name="dashboardUser" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="TKUser" inverseName="dashboard" inverseEntity="TKUser" syncable="YES"/>
         <relationship name="dialogue" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TKChat" inverseName="post" inverseEntity="TKChat" syncable="YES"/>
+        <relationship name="likedUser" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="TKUser" inverseName="likes" inverseEntity="TKUser" syncable="YES"/>
         <relationship name="photoSets" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TKPhotoSet" inverseName="post" inverseEntity="TKPhotoSet" syncable="YES"/>
         <relationship name="user" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="TKUser" inverseName="posts" inverseEntity="TKUser" syncable="YES"/>
     </entity>
     <entity name="TKUser" representedClassName="TKUser" syncable="YES">
         <attribute name="defaultPostFormat" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="following" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="likes" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="followingCount" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="likesCount" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="remoteID" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="blogs" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TKBlog" inverseName="user" inverseEntity="TKBlog" syncable="YES"/>
+        <relationship name="dashboard" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TKPost" inverseName="dashboardUser" inverseEntity="TKPost" syncable="YES"/>
+        <relationship name="following" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TKBlog" inverseName="followedUser" inverseEntity="TKBlog" syncable="YES"/>
+        <relationship name="likes" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TKPost" inverseName="likedUser" inverseEntity="TKPost" syncable="YES"/>
         <relationship name="posts" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TKPost" inverseName="user" inverseEntity="TKPost" syncable="YES"/>
         <compoundIndexes>
             <compoundIndex>
@@ -92,11 +105,11 @@
         </compoundIndexes>
     </entity>
     <elements>
+        <element name="TKBlog" positionX="0" positionY="0" width="128" height="285"/>
         <element name="TKChat" positionX="0" positionY="0" width="128" height="120"/>
         <element name="TKPhoto" positionX="0" positionY="0" width="128" height="105"/>
         <element name="TKPhotoSet" positionX="0" positionY="0" width="128" height="105"/>
-        <element name="TKBlog" positionX="0" positionY="0" width="128" height="270"/>
-        <element name="TKPost" positionX="0" positionY="0" width="128" height="585"/>
-        <element name="TKUser" positionX="0" positionY="0" width="128" height="150"/>
+        <element name="TKPost" positionX="0" positionY="0" width="128" height="720"/>
+        <element name="TKUser" positionX="0" positionY="0" width="128" height="195"/>
     </elements>
 </model>

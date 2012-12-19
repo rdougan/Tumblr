@@ -33,6 +33,10 @@
             return @"photo";
             break;
             
+        case TKPostTypePhotoSet:
+            return @"photoset";
+            break;
+            
         case TKPostTypeQuote:
             return @"quote";
             break;

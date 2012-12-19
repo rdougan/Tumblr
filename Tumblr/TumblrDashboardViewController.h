@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 Robert Dougan. All rights reserved.
 //
 
-#import "TumblrPostsViewController.h"
+#import "TumblrPostsCollectionViewController.h"
 
-@interface TumblrDashboardViewController : TumblrPostsViewController
+@interface TumblrDashboardViewController : TumblrPostsCollectionViewController
 
 - (id)initWithRemoteID:(NSString *)remoteID;
 

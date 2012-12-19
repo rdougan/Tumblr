@@ -8,17 +8,13 @@
 
 #import "TumblrDashboardViewController.h"
 
-@interface TumblrDashboardViewController ()
-
-@end
-
 @implementation TumblrDashboardViewController {
     TKUser *_user;
 }
 
 - (id)initWithRemoteID:(NSString *)remoteID
 {
-    self = [super initWithStyle:UITableViewStyleGrouped];
+    self = [super init];
     if (self) {
         // find the user
         _user = [TKUser objectWithRemoteID:remoteID];
@@ -62,14 +58,7 @@
 #pragma mark - SSManagedViewController
 
 - (NSPredicate *)predicate {
-	return [NSPredicate predicateWithFormat:@"user = %@", _user];
-}
-
-#pragma mark - UITableViewDelegate
-
-- (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return NO;
+	return [NSPredicate predicateWithFormat:@"dashboardUser = %@", _user];
 }
 
 @end

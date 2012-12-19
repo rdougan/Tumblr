@@ -30,8 +30,8 @@ typedef void (^TumblrHTTPClientFailure)(AFJSONRequestOperation *operation, NSErr
 #pragma mark - Users
 
 - (void)updateUserInfo:(TKUser *)user success:(TumblrHTTPClientSuccess)success failure:(TumblrHTTPClientFailure)failure;
-- (void)dashboardForUser:(TKUser *)user success:(TumblrHTTPClientSuccess)success failure:(TumblrHTTPClientFailure)failure;
 - (void)dashboardForUser:(TKUser *)user offset:(int)offset success:(TumblrHTTPClientSuccess)success failure:(TumblrHTTPClientFailure)failure;
+- (void)likesForUser:(TKUser *)user offset:(int)offset success:(TumblrHTTPClientSuccess)success failure:(TumblrHTTPClientFailure)failure;
 
 #pragma mark - Blogs
 

@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Robert Dougan. All rights reserved.
 //
 
-#import <Pods/Pods.h>
+#import "SSTextField.h"
 
 @interface TumblrTextField : SSTextField
 

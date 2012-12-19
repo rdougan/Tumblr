@@ -26,10 +26,16 @@
 @property (nonatomic, retain) NSNumber *askAnon;
 @property (nonatomic, retain) NSNumber *admin;
 @property (nonatomic, retain) NSDate *updatedAt;
+
 @property (nonatomic, retain) TKUser *user;
+@property (nonatomic, retain) TKUser *followedUser;
+
 @property (nonatomic, retain) NSSet *posts;
 
 - (NSString *)hostname;
+
++ (TKBlog *)defaultBlog;
++ (void)setDefaultBlog:(TKBlog *)defaultBlog;
 
 @end
 

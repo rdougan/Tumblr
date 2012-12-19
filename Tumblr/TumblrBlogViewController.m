@@ -8,8 +8,6 @@
 
 #import "TumblrBlogViewController.h"
 
-#import "TumblrPostsViewController.h"
-
 @interface TumblrBlogViewController ()
 
 @end
@@ -20,7 +18,7 @@
 
 - (id)initWithRemoteID:(NSString *)remoteID
 {
-    self = [super initWithStyle:UITableViewStyleGrouped];
+    self = [super init];
     if (self) {
         // find the blog
         _blog = [TKBlog objectWithRemoteID:remoteID];
@@ -64,13 +62,6 @@
 
 - (NSPredicate *)predicate {
 	return [NSPredicate predicateWithFormat:@"blog = %@", _blog];
-}
-
-#pragma mark - UITableViewDelegate
-
-- (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return NO;
 }
 
 @end

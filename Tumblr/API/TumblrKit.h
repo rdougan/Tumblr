@@ -22,9 +22,13 @@ static NSString *const kTKAuthroizeURLString = @"http://www.tumblr.com/oauth/aut
 static NSString *const kTKBaseURLString = @"http://api.tumblr.com/";
 static NSString *const kTKAPIVersion = @"v2";
 
+#pragma mark - User Defaults
+static NSString *const kTKDefaultPostBlogKey = @"kTKDefaultPostBlogKey";
+
 #pragma mark - Notifications
 
-static NSString *const kTKCurrentUserChangedNotificationName = @"TumblrCurrentUserChangedNotification";
+static NSString *const kTKCurrentUserChangedNotificationName = @"kTKCurrentUserChangedNotificationName";
+static NSString *const kTKCurrentDefaultPostBlogChangedNotificationName = @"kTKCurrentDefaultPostBlogChangedNotificationName";
 
 #pragma mark - Post Types
 typedef enum {

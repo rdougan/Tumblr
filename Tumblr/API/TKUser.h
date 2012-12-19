@@ -12,11 +12,15 @@
 @interface TKUser : SSRemoteManagedObject
 
 @property (nonatomic, retain) NSString *name;
-@property (nonatomic, retain) NSNumber *following;
-@property (nonatomic, retain) NSNumber *likes;
+@property (nonatomic, retain) NSNumber *followingCount;
+@property (nonatomic, retain) NSNumber *likesCount;
 @property (nonatomic, retain) NSString *defaultPostFormat;
+
 @property (nonatomic, retain) NSSet *blogs;
 @property (nonatomic, retain) NSSet *posts;
+@property (nonatomic, retain) NSSet *dashboard;
+@property (nonatomic, retain) NSSet *likes;
+@property (nonatomic, retain) NSSet *following;
 
 @property (nonatomic, strong) NSString *accessToken;
 
@@ -28,8 +32,9 @@
 @end
 
 @interface TKUser (CoreDataGeneratedAccessors)
-- (void)addBlogsObject:(TKBlog *)value;
-- (void)removeBlogsObject:(TKBlog *)value;
-- (void)addBlogs:(NSSet *)values;
-- (void)removeBlogs:(NSSet *)values;
+- (void)addDashboardObject:(TKPost *)value;
+- (void)removeDashboardObject:(TKPost *)value;
+
+- (void)addLikesObject:(TKPost *)value;
+- (void)removeLikesObject:(TKPost *)value;
 @end

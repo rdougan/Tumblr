@@ -23,7 +23,10 @@
 @dynamic askAnon;
 @dynamic admin;
 @dynamic updatedAt;
+
 @dynamic user;
+@dynamic followedUser;
+
 @dynamic posts;
 
 + (NSString *)remoteIDField
@@ -67,6 +70,21 @@
     hostname = [hostname substringToIndex:[hostname length] - 1];
     
     return hostname;
+}
+
+#pragma mark - Class Methods
+
++ (TKBlog *)defaultBlog
+{
+    return [TKBlog objectWithRemoteID:[[NSUserDefaults standardUserDefaults] objectForKey:kTKDefaultPostBlogKey]];
+}
+
++ (void)setDefaultBlog:(TKBlog *)defaultBlog
+{
+    [[NSUserDefaults standardUserDefaults] setObject:[defaultBlog remoteID] forKey:kTKDefaultPostBlogKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:kTKCurrentDefaultPostBlogChangedNotificationName object:nil];
 }
 
 @end

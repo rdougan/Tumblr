@@ -10,22 +10,17 @@
 
 @implementation TumblrTextField
 
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        // Initialization code
-    }
-    return self;
-}
-
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect
 {
-    // Drawing code
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextClearRect(context, rect);
+    CGContextSetLineWidth(context, 0.5);
+    
+    CGContextBeginPath(context);
+    CGContextSetStrokeColorWithColor(context, [UIColor lightGrayColor].CGColor);
+    CGContextMoveToPoint(context, 0, rect.size.height - 1);
+    CGContextAddLineToPoint(context, rect.size.width, rect.size.height - 1);
+    CGContextStrokePath(context);
 }
-*/
 
 @end

@@ -20,10 +20,21 @@
 @dynamic sourceURL;
 @dynamic sourceTitle;
 @dynamic state;
-@dynamic blog;
-@dynamic user;
 @dynamic liked;
 @dynamic createdAt;
+
+@dynamic blog;
+@dynamic user;
+@dynamic dashboardUser;
+@dynamic likedUser;
+
+@dynamic rebloggedFromId;
+@dynamic rebloggedFromName;
+@dynamic rebloggedFromTitle;
+@dynamic rebloggedFromURL;
+@dynamic rebloggedRootName;
+@dynamic rebloggedRootTitle;
+@dynamic rebloggedRootURL;
 
 @dynamic title;
 @dynamic url;
@@ -70,6 +81,15 @@
 	self.sourceTitle = [dictionary safeObjectForKey:@"source_title"];
 	self.liked = [NSNumber numberWithInt:[[dictionary safeObjectForKey:@"liked"] boolValue]];
     self.createdAt = [NSDate dateWithTimeIntervalSince1970:[[dictionary safeObjectForKey:@"timestamp"] intValue]];
+    
+    // Reblogged information
+	self.rebloggedFromId = [NSNumber numberWithInt:[[dictionary safeObjectForKey:@"reblogged_from_id"] intValue]];
+	self.rebloggedFromName = [dictionary safeObjectForKey:@"reblogged_from_name"];
+	self.rebloggedFromTitle = [dictionary safeObjectForKey:@"reblogged_from_title"];
+	self.rebloggedFromURL = [dictionary safeObjectForKey:@"reblogged_from_url"];
+	self.rebloggedRootName = [dictionary safeObjectForKey:@"reblogged_root_name"];
+	self.rebloggedRootTitle = [dictionary safeObjectForKey:@"reblogged_root_title"];
+	self.rebloggedRootURL = [dictionary safeObjectForKey:@"reblogged_root_url"];
     
     NSString *type = [dictionary objectForKey:@"type"];
     if ([type isEqualToString:@"text"]) {
@@ -178,6 +198,11 @@
         default:
         break;
     }
+}
+
+- (BOOL)isReblogged
+{
+    return (self.rebloggedFromName && ![self.rebloggedFromName isEqualToString:@""]);
 }
 
 #pragma mark - Getters

@@ -14,25 +14,68 @@
 
 @implementation TumblrBlogsTableViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)init
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
+    return (self = [super initWithStyle:UITableViewStylePlain]);
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
+    
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [self restoreDefaultBlog];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Selected Blog
+
+- (void)restoreDefaultBlog
+{
+    TKBlog *defaultBlog = [TKBlog defaultBlog];
+    
+    if (!defaultBlog) {
+        defaultBlog = [self objectForViewIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]];
+        [TKBlog setDefaultBlog:defaultBlog];
+    }
+    
+    NSIndexPath *indexPath = [self.fetchedResultsController indexPathForObject:defaultBlog];
+    [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+}
+
+#pragma mark - SSManagedViewController
+
+- (Class)entityClass {
+	return [TKBlog class];
+}
+
+#pragma mark - UITableViewDataSource
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    TKBlog *blog = [self objectForViewIndexPath:indexPath];
+    NSString *cellIdentifier = @"Cell";
+    
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
+    [[cell textLabel] setText:[blog title]];
+    
+    return cell;
+}
+
+#pragma mark - UITableViewDelegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    TKBlog *defaultBlog = [self objectForViewIndexPath:indexPath];
+    [TKBlog setDefaultBlog:defaultBlog];
 }
 
 @end

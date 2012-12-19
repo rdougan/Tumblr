@@ -8,31 +8,57 @@
 
 #import "TumblrLikesViewController.h"
 
-@interface TumblrLikesViewController ()
+@implementation TumblrLikesViewController {
+    TKUser *_user;
+}
 
-@end
-
-@implementation TumblrLikesViewController
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)initWithRemoteID:(NSString *)remoteID
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super init];
     if (self) {
-        // Custom initialization
+        // find the user
+        _user = [TKUser objectWithRemoteID:remoteID];
     }
     return self;
 }
 
+#pragma mark - UIViewController
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
+    
+    [self setTitle:@"Likes"];
+    
+    [self fetchPostsWithOffset:0];
 }
 
-- (void)didReceiveMemoryWarning
+#pragma mark - TumblrPostsViewController
+
+- (int)totalCount
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    return [[_user likesCount] intValue];
+}
+
+- (void)fetchPosts
+{
+    [[TKHTTPClient sharedClient] likesForUser:_user offset:self.loadOffset success:^(AFJSONRequestOperation *operation, id responseObject) {
+        self.loadOffset = self.loadOffset + 20;
+        self.loadingPosts = NO;
+        
+        [self checkAndLoadMoreIfNeeded];
+    } failure:^(AFJSONRequestOperation *operation, NSError *error) {
+        NSLog(@"failure: %@", error);
+        
+        self.loadingPosts = NO;
+    }];
+}
+
+#pragma mark - SSManagedViewController
+
+- (NSPredicate *)predicate {
+	return [NSPredicate predicateWithFormat:@"likedUser = %@", _user];
 }
 
 @end
+

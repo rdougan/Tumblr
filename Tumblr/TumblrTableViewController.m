@@ -10,6 +10,10 @@
 
 #import "TumblrBlogViewController.h"
 #import "TumblrDashboardViewController.h"
+#import "TumblrLikesViewController.h"
+
+#import "TumblrCreatePostViewController.h"
+#import "TumblrCreateTextPostViewController.h"
 
 @interface TumblrTableViewController ()
 
@@ -91,23 +95,10 @@
 
 - (void)refresh:(id)sender
 {
-//    [[TumblrHTTPClient sharedClient] updateUserInfo:[User currentUser] success:^(AFJSONRequestOperation *operation, id responseObject) {
-//        [self reloadData];
-//    } failure:^(AFJSONRequestOperation *operation, NSError *error) {
-//        NSLog(@"Error updating user info: %@", error);
-//    }];
-    
-    TKBlog *blog = [TKBlog objectWithRemoteID:@"thumblrapp"];
-    
-    TKPost *post = [[TKPost alloc] init];
-    [post setTitle:@"testing"];
-    [post setBody:@"well hello there"];
-    [post setBlog:blog];
-
-    [post createWithSuccess:^{
-        NSLog(@"success!");
-    } failure:^(AFJSONRequestOperation *remoteOperation, NSError *error) {
-        NSLog(@"error: %@", error);
+    [[TKHTTPClient sharedClient] updateUserInfo:[TKUser currentUser] success:^(AFJSONRequestOperation *operation, id responseObject) {
+        [self reloadData];
+    } failure:^(AFJSONRequestOperation *operation, NSError *error) {
+        NSLog(@"Error updating user info: %@", error);
     }];
 }
 
@@ -123,8 +114,8 @@
     
     if ([TKUser currentUser]) {
         [_data addObject:@{@"title" : @"Name", @"detail" : [user name]}];
-        [_data addObject:@{@"title" : @"Following", @"detail" : [NSString stringWithFormat:@"%@", [user following]]}];
-        [_data addObject:@{@"title" : @"Likes", @"detail" : [NSString stringWithFormat:@"%@", [user likes]]}];
+        [_data addObject:@{@"title" : @"Following", @"detail" : [NSString stringWithFormat:@"%@", [user followingCount]]}];
+        [_data addObject:@{@"title" : @"Likes", @"detail" : [NSString stringWithFormat:@"%@", [user likesCount]]}];
         [_data addObject:@{@"title" : @"Access Token", @"detail" : [user accessToken]}];
     }
     
@@ -136,7 +127,7 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     if ([TKUser currentUser]) {
-        return 3;
+        return 4;
     }
     return 1;
 }
@@ -147,9 +138,11 @@
         if (section == 0) {
             return [_data count];
         } else if (section == 1) {
-            return 1;
-        } else {
+            return 2;
+        } else if (section == 2) {
             return [[[TKUser currentUser] blogs] count];
+        } else if (section == 3) {
+            return 8;
         }
     }
     return 0;
@@ -161,7 +154,7 @@
     int row = [indexPath indexAtPosition:1];
     
     static NSString *CellIdentifier;
-    if (![TKUser currentUser]) {
+    if (![TKUser currentUser] || section == 3) {
         CellIdentifier = @"LoggedOutRow";
     } else if (section == 0) {
         CellIdentifier = @"DataRow";
@@ -171,7 +164,7 @@
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        if (![TKUser currentUser]) {
+        if (![TKUser currentUser] || section == 3) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         } else if (section == 0) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:CellIdentifier];
@@ -186,13 +179,26 @@
         [[cell textLabel] setText:[item objectForKey:@"title"]];
         [[cell detailTextLabel] setText:[item objectForKey:@"detail"]];
     } else if (section == 1) {
-        [[cell textLabel] setText:@"Dashboard"];
-    } else {
+        switch (row) {
+            case 0:
+                [[cell textLabel] setText:@"Dashboard"];
+                break;
+            
+            case 1:
+                [[cell textLabel] setText:@"Likes"];
+                break;
+                
+            default:
+                break;
+        }
+    } else if (section == 2) {
         NSArray *blogs = [[[TKUser currentUser] blogs] allObjects];
         TKBlog *item = [blogs objectAtIndex:row];
         
         [[cell textLabel] setText:[item title]];
         [[cell detailTextLabel] setText:[item remoteID]];
+    } else if (section == 3) {
+        [[cell textLabel] setText:[[NSNumber numberWithInt:row] stringTypeValue]];
     }
     
     return cell;
@@ -216,17 +222,66 @@
         return;
     }
     
-    UITableViewController *viewController;
+    int row = [indexPath indexAtPosition:1];
+    
+    UIViewController *viewController;
     if (section == 1) {
-        viewController = (UITableViewController *)[[TumblrDashboardViewController alloc] initWithRemoteID:[[TKUser currentUser] remoteID]];
-    } else {
+        switch (row) {
+            case 0:
+                viewController = (UIViewController *)[[TumblrDashboardViewController alloc] initWithRemoteID:[[TKUser currentUser] remoteID]];
+                break;
+            
+            case 1:
+                viewController = (UIViewController *)[[TumblrLikesViewController alloc] initWithRemoteID:[[TKUser currentUser] remoteID]];
+                break;
+                
+            default:
+                break;
+        }
+    } else if (section == 2) {
         NSArray *blogs = [[[TKUser currentUser] blogs] allObjects];
-        TKBlog *item = [blogs objectAtIndex:[indexPath indexAtPosition:1]];
+        TKBlog *item = [blogs objectAtIndex:row];
         
-        viewController = (UITableViewController *)[[TumblrBlogViewController alloc] initWithRemoteID:[item remoteID]];
+        viewController = (UIViewController *)[[TumblrBlogViewController alloc] initWithRemoteID:[item remoteID]];
+    } else if (section == 3) {
+        NSString *type = [[NSNumber numberWithInt:row] stringTypeValue];
+        NSString *className = [NSString stringWithFormat:@"TumblrCreate%@PostViewController", [type capitalizedString]];
+        
+        viewController = (UIViewController *)[[NSClassFromString(className) alloc] init];
     }
     
-    [self.navigationController pushViewController:viewController animated:YES];
+    if (section == 3) {
+        UINavigationController *createNavigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+        [createNavigationController setModalPresentationStyle:UIModalPresentationFormSheet];
+        [self.navigationController presentViewController:createNavigationController animated:YES completion:nil];
+    } else {
+        [self.navigationController pushViewController:viewController animated:YES];
+    }
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    if (![TKUser currentUser]) {
+        return @"";
+    }
+    
+    switch (section) {
+        case 0:
+            return @"User Information";
+            break;
+            
+        case 2:
+            return @"User Blogs";
+            break;
+            
+        case 3:
+            return @"Create a new post";
+            break;
+            
+        default:
+            return @"";
+            break;
+    }
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section

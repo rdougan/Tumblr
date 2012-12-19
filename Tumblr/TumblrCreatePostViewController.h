@@ -8,6 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+#define kPostFieldPadding 10.0f
+
 @interface TumblrCreatePostViewController : UIViewController
+
+@property (nonatomic, retain) TKBlog *blog;
+
+- (id)init;
+
+- (TKPost *)post;
 
 @end

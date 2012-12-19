@@ -10,4 +10,9 @@
 
 @interface TumblrPostCollectionViewCell : UICollectionViewCell
 
+@property (nonatomic, retain) UILabel *blogNameLabel;
+@property (nonatomic, retain) UILabel *rebloggedNameLabel;
+
+- (void)setPost:(TKPost *)post;
+
 @end

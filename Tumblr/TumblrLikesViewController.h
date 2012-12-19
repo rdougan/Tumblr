@@ -10,4 +10,6 @@
 
 @interface TumblrLikesViewController : TumblrPostsCollectionViewController
 
+- (id)initWithRemoteID:(NSString *)remoteID;
+
 @end

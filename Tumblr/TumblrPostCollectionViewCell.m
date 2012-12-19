@@ -8,24 +8,51 @@
 
 #import "TumblrPostCollectionViewCell.h"
 
-@implementation TumblrPostCollectionViewCell
+@implementation TumblrPostCollectionViewCell {
+    TKPost *_post;
+}
+
+@synthesize blogNameLabel = _blogNameLabel,
+rebloggedNameLabel = _rebloggedNameLabel;
 
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code
+        [self setBackgroundColor:[UIColor whiteColor]];
+        
+        _blogNameLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        _rebloggedNameLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        
+        [self addSubview:_blogNameLabel];
+        [self addSubview:_rebloggedNameLabel];
     }
     return self;
 }
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
+- (void)setPost:(TKPost *)post
 {
-    // Drawing code
+    _post = post;
+    
+    [_blogNameLabel setText:[_post blogName]];
+    
+    if ([_post isReblogged]) {
+        [_rebloggedNameLabel setText:[_post rebloggedFromName]];
+    } else {
+        [_rebloggedNameLabel setText:@""];
+    }
+    
+    [self layoutSubviews];
 }
-*/
+
+- (void)layoutSubviews
+{
+    [_blogNameLabel setFrame:CGRectMake(10.0f, 10.0f, 0, 0)];
+    [_blogNameLabel sizeToFit];
+    
+    CGRect frame = CGRectMake(_blogNameLabel.frame.origin.x + _blogNameLabel.frame.size.width + 10.0f, 10.0f, 0, 0);
+    [_rebloggedNameLabel setFrame:frame];
+    [_rebloggedNameLabel sizeToFit];
+}
 
 @end

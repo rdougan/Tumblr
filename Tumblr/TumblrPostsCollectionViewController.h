@@ -6,8 +6,15 @@
 //  Copyright (c) 2012 Robert Dougan. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "SSManagedCollectionViewController.h"
 
-@interface TumblrPostsCollectionViewController : UICollectionViewController
+@interface TumblrPostsCollectionViewController : SSManagedCollectionViewController <UICollectionViewDelegateFlowLayout>
+
+@property (nonatomic, assign) BOOL loadingPosts;
+@property (nonatomic, assign) int loadOffset;
+
+- (int)totalCount;
+- (void)fetchPostsWithOffset:(int)offset;
+- (void)checkAndLoadMoreIfNeeded;
 
 @end

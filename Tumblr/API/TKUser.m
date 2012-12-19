@@ -13,12 +13,17 @@ static TKUser *__currentUser = nil;
 
 @implementation TKUser
 
-@dynamic following;
-@dynamic likes;
+@dynamic followingCount;
+@dynamic likesCount;
 @dynamic name;
 @dynamic defaultPostFormat;
+
 @dynamic blogs;
 @dynamic posts;
+@dynamic dashboard;
+@dynamic likes;
+@dynamic following;
+
 @synthesize accessToken = _accessToken;
 
 + (NSString *)entityName {
@@ -73,8 +78,8 @@ static TKUser *__currentUser = nil;
 	[super unpackDictionary:dictionary];
     
 	self.name = [dictionary safeObjectForKey:@"name"];
-	self.likes = [NSNumber numberWithInt:[[dictionary safeObjectForKey:@"likes"] intValue]];
-	self.following = [NSNumber numberWithInt:[[dictionary safeObjectForKey:@"following"] intValue]];
+	self.likesCount = [NSNumber numberWithInt:[[dictionary safeObjectForKey:@"likes"] intValue]];
+	self.followingCount = [NSNumber numberWithInt:[[dictionary safeObjectForKey:@"following"] intValue]];
     
     // Delete all existing blogs
     [self.blogs makeObjectsPerformSelector:@selector(delete)];
