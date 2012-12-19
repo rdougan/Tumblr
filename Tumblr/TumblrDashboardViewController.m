@@ -12,27 +12,65 @@
 
 @end
 
-@implementation TumblrDashboardViewController
+@implementation TumblrDashboardViewController {
+    User *_user;
+}
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)initWithRemoteID:(NSString *)remoteID
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super initWithStyle:UITableViewStyleGrouped];
     if (self) {
-        // Custom initialization
+        // find the user
+        _user = [User objectWithRemoteID:remoteID];
     }
     return self;
 }
 
+#pragma mark - UIViewController
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
+    
+    [self setTitle:@"Dashboard"];
+ 
+    [self fetchPostsWithOffset:0];
 }
 
-- (void)didReceiveMemoryWarning
+#pragma mark - TumblrPostsViewController
+
+- (int)totalCount
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    // Dashboard cap seems to be 260...
+    return 250;
+}
+
+- (void)fetchPosts
+{
+    [[TumblrHTTPClient sharedClient] dashboardForUser:_user offset:self.loadOffset success:^(AFJSONRequestOperation *operation, id responseObject) {
+        self.loadOffset = self.loadOffset + 20;
+        self.loadingPosts = NO;
+
+        [self checkAndLoadMoreIfNeeded];
+    } failure:^(AFJSONRequestOperation *operation, NSError *error) {
+        NSLog(@"failure: %@", error);
+
+        self.loadingPosts = NO;
+    }];
+}
+
+#pragma mark - SSManagedViewController
+
+- (NSPredicate *)predicate {
+	return [NSPredicate predicateWithFormat:@"user = %@", _user];
+}
+
+#pragma mark - UITableViewDelegate
+
+- (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return NO;
 }
 
 @end
+

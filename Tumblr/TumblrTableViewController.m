@@ -6,32 +6,46 @@
 //  Copyright (c) 2012 Robert Dougan. All rights reserved.
 //
 
-#import "TumblrUserTableViewController.h"
+#import "TumblrTableViewController.h"
 
-@interface TumblrUserTableViewController ()
+#import "TumblrBlogViewController.h"
+#import "TumblrDashboardViewController.h"
+
+@interface TumblrTableViewController ()
 
 @end
 
-@implementation TumblrUserTableViewController
+@implementation TumblrTableViewController {
+    NSMutableArray *_data;
+    
+    UIBarButtonItem *_loginButton;
+    UIBarButtonItem *_logoutButton;
+}
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
     if (self) {
-        // Custom initialization
+        [[NSNotificationCenter defaultCenter] addObserverForName:kTumblrCurrentUserChangedNotificationName object:nil queue:nil usingBlock:^(NSNotification *note) {
+            [self userChanged];
+        }];
     }
     return self;
 }
 
+#pragma mark - UIViewController
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
+    
+    // Refresh button
+    [self.navigationItem setRightBarButtonItem:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh:)]];
+    
+    [self userChanged];
+    [self reloadData];
 }
 
 - (void)didReceiveMemoryWarning
@@ -40,82 +54,185 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - Authentication
+
+- (void)userChanged
+{    
+    if ([User currentUser]) {
+        if (!_logoutButton) {
+            _logoutButton = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(logout:)];
+        }
+        
+        [self.navigationItem setLeftBarButtonItem:_logoutButton];
+    } else {
+        if (!_loginButton) {
+            _loginButton = [[UIBarButtonItem alloc] initWithTitle:@"Login" style:UIBarButtonItemStylePlain target:self action:@selector(login:)];
+        }
+        
+        [self.navigationItem setLeftBarButtonItem:_loginButton];
+    }
+    
+    [self reloadData];
+}
+
+- (void)login:(id)sender
+{
+    [[TumblrHTTPClient sharedClient] login];
+}
+
+- (void)logout:(id)sender
+{
+    [[TumblrHTTPClient sharedClient] logout];
+}
+
+#pragma mark - Data
+
+- (void)refresh:(id)sender
+{
+//    [[TumblrHTTPClient sharedClient] updateUserInfo:[User currentUser] success:^(AFJSONRequestOperation *operation, id responseObject) {
+//        [self reloadData];
+//    } failure:^(AFJSONRequestOperation *operation, NSError *error) {
+//        NSLog(@"Error updating user info: %@", error);
+//    }];
+    
+    Blog *blog = [Blog objectWithRemoteID:@"thumblrapp"];
+    
+    Post *post = [[Post alloc] init];
+    [post setTitle:@"testing"];
+    [post setBody:@"well hello there"];
+    [post setBlog:blog];
+
+    [post createWithSuccess:^{
+        NSLog(@"success!");
+    } failure:^(AFJSONRequestOperation *remoteOperation, NSError *error) {
+        NSLog(@"error: %@", error);
+    }];
+}
+
+- (void)reloadData
+{
+    if (!_data) {
+        _data = [NSMutableArray array];
+    }
+    
+    [_data removeAllObjects];
+    
+    User *user = [User currentUser];
+    
+    if ([User currentUser]) {
+        [_data addObject:@{@"title" : @"Name", @"detail" : [user name]}];
+        [_data addObject:@{@"title" : @"Following", @"detail" : [NSString stringWithFormat:@"%@", [user following]]}];
+        [_data addObject:@{@"title" : @"Likes", @"detail" : [NSString stringWithFormat:@"%@", [user likes]]}];
+        [_data addObject:@{@"title" : @"Access Token", @"detail" : [user accessToken]}];
+    }
+    
+    [self.tableView reloadData];
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
-    // Return the number of sections.
-    return 0;
+    if ([User currentUser]) {
+        return 3;
+    }
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
-    // Return the number of rows in the section.
+    if ([User currentUser]) {
+        if (section == 0) {
+            return [_data count];
+        } else if (section == 1) {
+            return 1;
+        } else {
+            return [[[User currentUser] blogs] count];
+        }
+    }
     return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    int section = [indexPath indexAtPosition:0];
+    int row = [indexPath indexAtPosition:1];
     
-    // Configure the cell...
+    static NSString *CellIdentifier;
+    if (![User currentUser]) {
+        CellIdentifier = @"LoggedOutRow";
+    } else if (section == 0) {
+        CellIdentifier = @"DataRow";
+    } else {
+        CellIdentifier = @"BlogsRow";
+    }
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        if (![User currentUser]) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        } else if (section == 0) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:CellIdentifier];
+        } else {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        }
+    }
+    
+    if (section == 0) {
+        NSDictionary *item = [_data objectAtIndex:row];
+        
+        [[cell textLabel] setText:[item objectForKey:@"title"]];
+        [[cell detailTextLabel] setText:[item objectForKey:@"detail"]];
+    } else if (section == 1) {
+        [[cell textLabel] setText:@"Dashboard"];
+    } else {
+        NSArray *blogs = [[[User currentUser] blogs] allObjects];
+        Blog *item = [blogs objectAtIndex:row];
+        
+        [[cell textLabel] setText:[item title]];
+        [[cell detailTextLabel] setText:[item remoteID]];
+    }
     
     return cell;
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+#pragma mark - UITableViewDelegate
+
+- (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Return NO if you do not want the specified item to be editable.
+    if ([indexPath indexAtPosition:0] == 0) {
+        return NO;
+    }
+    
     return YES;
 }
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-#pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
+    int section = [indexPath indexAtPosition:0];
+    if (section == 0) {
+        return;
+    }
+    
+    UITableViewController *viewController;
+    if (section == 1) {
+        viewController = (UITableViewController *)[[TumblrDashboardViewController alloc] initWithRemoteID:[[User currentUser] remoteID]];
+    } else {
+        NSArray *blogs = [[[User currentUser] blogs] allObjects];
+        Blog *item = [blogs objectAtIndex:[indexPath indexAtPosition:1]];
+        
+        viewController = (UITableViewController *)[[TumblrBlogViewController alloc] initWithRemoteID:[item remoteID]];
+    }
+    
+    [self.navigationController pushViewController:viewController animated:YES];
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+{
+    if (![User currentUser]) {
+        return @"Please login to view Tumblr content.";
+    }
+    return nil;
 }
 
 @end

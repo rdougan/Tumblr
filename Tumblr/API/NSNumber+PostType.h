@@ -10,4 +10,8 @@
 
 @interface NSNumber (PostType)
 
+- (TumblrPostType)entityTypeValue;
++ (NSNumber *)numberWithEntityType:(TumblrPostType)entityType;
+- (NSString *)stringTypeValue;
+
 @end

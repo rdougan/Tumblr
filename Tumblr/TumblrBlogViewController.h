@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TumblrPostsViewController.h"
 
-@interface TumblrBlogViewController : UITableViewController
+@interface TumblrBlogViewController : TumblrPostsViewController
+
+- (id)initWithRemoteID:(NSString *)remoteID;
 
 @end

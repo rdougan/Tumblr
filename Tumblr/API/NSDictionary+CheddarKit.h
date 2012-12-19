@@ -10,4 +10,6 @@
 
 @interface NSDictionary (CheddarKit)
 
+- (id)safeObjectForKey:(id)key;
+
 @end

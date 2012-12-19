@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TumblrUserTableViewController : UITableViewController
+@interface TumblrTableViewController : UITableViewController
 
 @end

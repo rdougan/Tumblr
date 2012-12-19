@@ -10,4 +10,6 @@
 
 @interface TumblrDashboardViewController : TumblrPostsViewController
 
+- (id)initWithRemoteID:(NSString *)remoteID;
+
 @end

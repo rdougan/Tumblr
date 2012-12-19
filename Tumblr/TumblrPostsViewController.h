@@ -10,4 +10,11 @@
 
 @interface TumblrPostsViewController : SSManagedTableViewController
 
+@property (nonatomic, assign) BOOL loadingPosts;
+@property (nonatomic, assign) int loadOffset;
+
+- (int)totalCount;
+- (void)fetchPostsWithOffset:(int)offset;
+- (void)checkAndLoadMoreIfNeeded;
+
 @end
