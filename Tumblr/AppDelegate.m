@@ -27,7 +27,7 @@
     [self.window setBackgroundColor:[UIColor whiteColor]];
     [self.window makeKeyAndVisible];
     
-    [TumblrHTTPClient sharedClient];
+    [TKHTTPClient sharedClient];
     
     return YES;
 }

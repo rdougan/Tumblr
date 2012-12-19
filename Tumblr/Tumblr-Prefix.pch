@@ -17,5 +17,5 @@
     #import "SSDataKit.h"
     #import "SSKeychain.h"
 
-    #import "Tumblr.h"
+    #import "TumblrKit.h"
 #endif

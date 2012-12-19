@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Robert Dougan. All rights reserved.
 //
 
-#import "TumblrHTTPClient.h"
+#import "TKHTTPClient.h"
 
 #import "AppDelegate.h"
 
@@ -14,17 +14,17 @@
 #import "GTMOAuthViewControllerTouch.h"
 #import "SSKeyChain.h"
 
-@interface TumblrHTTPClient ()
+@interface TKHTTPClient ()
 @property (nonatomic, retain) GTMOAuthAuthentication *auth;
 @end
 
-@implementation TumblrHTTPClient
+@implementation TKHTTPClient
 
 #pragma mark - Singleton
 
-+ (TumblrHTTPClient *)sharedClient
++ (TKHTTPClient *)sharedClient
 {
-	static TumblrHTTPClient *sharedClient = nil;
+	static TKHTTPClient *sharedClient = nil;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
 		sharedClient = [[self alloc] init];
@@ -36,11 +36,11 @@
 
 - (id)init
 {
-    self = [super initWithBaseURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@/", kTumblrBaseURLString, kTumblrAPIVersion]]];
+    self = [super initWithBaseURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@/", kTKBaseURLString, kTKAPIVersion]]];
     if (self) {
         GTMOAuthAuthentication *auth = [self tumblrAuth];
         if (auth) {
-            [GTMOAuthViewControllerTouch authorizeFromKeychainForName:kTumbrServiceName authentication:auth];
+            [GTMOAuthViewControllerTouch authorizeFromKeychainForName:kTKServiceName authentication:auth];
         }
         [self setAuth:auth];
         
@@ -57,10 +57,10 @@
     
     GTMOAuthAuthentication *auth;
     auth = [[GTMOAuthAuthentication alloc] initWithSignatureMethod:kGTMOAuthSignatureMethodHMAC_SHA1
-                                                       consumerKey:kTumblrClientID
-                                                        privateKey:kTumblrClientSecret];
+                                                       consumerKey:kTKClientID
+                                                        privateKey:kTKClientSecret];
     
-    [auth setServiceProvider:kTumbrServiceName];
+    [auth setServiceProvider:kTKServiceName];
     [auth setCallback:@"http://www.example.com/OAuthCallback"];
     
     return auth;
@@ -83,14 +83,14 @@
     
     // Get the user information
     [self getPath:@"user/info" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        __weak NSManagedObjectContext *context = [User mainContext];
+        __weak NSManagedObjectContext *context = [TKUser mainContext];
         [context performBlockAndWait:^{
             NSDictionary *dictionary = [responseObject valueForKeyPath:@"response.user"];
-            User *user = [User objectWithDictionary:dictionary];
+            TKUser *user = [TKUser objectWithDictionary:dictionary];
             user.accessToken = [auth privateKey];
             [user save];
             
-            [User setCurrentUser:user];
+            [TKUser setCurrentUser:user];
         }];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"error: %@", error);
@@ -108,7 +108,7 @@
     } else {
         params = [NSMutableDictionary dictionary];
     }
-    [params setObject:kTumblrClientID forKey:@"api_key"];
+    [params setObject:kTKClientID forKey:@"api_key"];
     
     NSMutableURLRequest *request = [super requestWithMethod:method path:path parameters:params];
     
@@ -128,11 +128,11 @@
     GTMOAuthViewControllerTouch *viewController;
     viewController = [[GTMOAuthViewControllerTouch alloc] initWithScope:nil
                                                                language:nil
-                                                        requestTokenURL:[NSURL URLWithString:kTumblrRequestURLString]
-                                                      authorizeTokenURL:[NSURL URLWithString:kTumblrAuthroizeURLString]
-                                                         accessTokenURL:[NSURL URLWithString:kTumblrAccessURLString]
+                                                        requestTokenURL:[NSURL URLWithString:kTKRequestURLString]
+                                                      authorizeTokenURL:[NSURL URLWithString:kTKAuthroizeURLString]
+                                                         accessTokenURL:[NSURL URLWithString:kTKAccessURLString]
                                                          authentication:auth
-                                                         appServiceName:kTumbrServiceName
+                                                         appServiceName:kTKServiceName
                                                                delegate:self
                                                        finishedSelector:@selector(viewController:finishedWithAuth:error:)];
     
@@ -146,9 +146,9 @@
 
 - (void)logout
 {
-    [GTMOAuthViewControllerTouch removeParamsFromKeychainForName:kTumbrServiceName];
+    [GTMOAuthViewControllerTouch removeParamsFromKeychainForName:kTKServiceName];
     [self setAuth:nil];
-    [User setCurrentUser:nil];
+    [TKUser setCurrentUser:nil];
 }
 
 - (BOOL)isLoggedIn
@@ -158,10 +158,10 @@
 
 #pragma mark - Users
 
-- (void)updateUserInfo:(User *)user success:(TumblrHTTPClientSuccess)success failure:(TumblrHTTPClientFailure)failure
+- (void)updateUserInfo:(TKUser *)user success:(TumblrHTTPClientSuccess)success failure:(TumblrHTTPClientFailure)failure
 {
     [self getPath:@"user/info" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        __weak NSManagedObjectContext *context = [User mainContext];
+        __weak NSManagedObjectContext *context = [TKUser mainContext];
         [context performBlockAndWait:^{
             NSDictionary *dictionary = [responseObject valueForKeyPath:@"response.user"];
             [user unpackDictionary:dictionary];
@@ -178,22 +178,22 @@
     }];
 }
 
-- (void)dashboardForUser:(User *)user success:(TumblrHTTPClientSuccess)success failure:(TumblrHTTPClientFailure)failure
+- (void)dashboardForUser:(TKUser *)user success:(TumblrHTTPClientSuccess)success failure:(TumblrHTTPClientFailure)failure
 {
     [self dashboardForUser:user offset:0 success:success failure:failure];
 }
 
-- (void)dashboardForUser:(User *)user offset:(int)offset success:(TumblrHTTPClientSuccess)success failure:(TumblrHTTPClientFailure)failure
+- (void)dashboardForUser:(TKUser *)user offset:(int)offset success:(TumblrHTTPClientSuccess)success failure:(TumblrHTTPClientFailure)failure
 {
     NSDictionary *paramaters = @{@"offset" : [NSString stringWithFormat:@"%i", offset]};
     
     [self getPath:@"user/dashboard" parameters:paramaters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        __weak NSManagedObjectContext *context = [User mainContext];
+        __weak NSManagedObjectContext *context = [TKUser mainContext];
         [context performBlockAndWait:^{
             // Get all the posts
             NSArray *posts = [responseObject valueForKeyPath:@"response.posts"];
             for (NSDictionary *postDictionary in posts) {
-				Post *post = [Post objectWithDictionary:postDictionary];
+				TKPost *post = [TKPost objectWithDictionary:postDictionary];
 				post.user = user;
 			}
             
@@ -212,18 +212,18 @@
 
 #pragma mark - Blogs
 
-- (void)postsForBlog:(Blog *)blog success:(TumblrHTTPClientSuccess)success failure:(TumblrHTTPClientFailure)failure
+- (void)postsForBlog:(TKBlog *)blog success:(TumblrHTTPClientSuccess)success failure:(TumblrHTTPClientFailure)failure
 {
     [self postsForBlog:blog offset:0 success:success failure:failure];
 }
 
-- (void)postsForBlog:(Blog *)blog offset:(int)offset success:(TumblrHTTPClientSuccess)success failure:(TumblrHTTPClientFailure)failure
+- (void)postsForBlog:(TKBlog *)blog offset:(int)offset success:(TumblrHTTPClientSuccess)success failure:(TumblrHTTPClientFailure)failure
 {
     NSString *path = [NSString stringWithFormat:@"blog/%@/posts", [blog hostname]];
     NSDictionary *paramaters = @{@"offset" : [NSString stringWithFormat:@"%i", offset]};
     
     [self getPath:path parameters:paramaters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        __weak NSManagedObjectContext *context = [User mainContext];
+        __weak NSManagedObjectContext *context = [TKUser mainContext];
         [context performBlockAndWait:^{
             // Update the blog
             NSDictionary *blogDictionary = [responseObject valueForKeyPath:@"response.blog"];
@@ -232,7 +232,7 @@
             // Get all the posts
             NSArray *posts = [responseObject valueForKeyPath:@"response.posts"];
             for (NSDictionary *postDictionary in posts) {
-				Post *post = [Post objectWithDictionary:postDictionary];
+				TKPost *post = [TKPost objectWithDictionary:postDictionary];
 				post.blog = blog;
 			}
             
@@ -249,10 +249,10 @@
     }];
 }
 
-- (void)savePost:(Post *)post forBlog:(Blog *)blog parameters:(NSDictionary *)parameters success:(TumblrHTTPClientSuccess)success failure:(TumblrHTTPClientFailure)failure
+- (void)savePost:(TKPost *)post forBlog:(TKBlog *)blog parameters:(NSDictionary *)parameters success:(TumblrHTTPClientSuccess)success failure:(TumblrHTTPClientFailure)failure
 {
     NSString *path = [NSString stringWithFormat:@"blog/%@/post", [blog hostname]];
-    __weak NSManagedObjectContext *context = [Post mainContext];
+    __weak NSManagedObjectContext *context = [TKPost mainContext];
     
     [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [context performBlockAndWait:^{
@@ -270,51 +270,51 @@
     }];
 }
 
-- (void)savePost:(Post *)post forBlog:(Blog *)blog success:(TumblrHTTPClientSuccess)success failure:(TumblrHTTPClientFailure)failure
+- (void)savePost:(TKPost *)post forBlog:(TKBlog *)blog success:(TumblrHTTPClientSuccess)success failure:(TumblrHTTPClientFailure)failure
 {
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     
     [parameters setObject:[[post type] stringTypeValue] forKey:@"type"];
     
     switch ([[post type] entityTypeValue]) {
-        case TumblrPostTypeText:
+        case TKPostTypeText:
             [parameters setObject:[post title] forKey:@"title"];
             [parameters setObject:[post body] forKey:@"body"];
             break;
             
-        case TumblrPostTypePhoto:
+        case TKPostTypePhoto:
             [parameters setObject:[post caption] forKey:@"caption"];
             [parameters setObject:[post url] forKey:@"link"];
             [parameters setObject:[post source] forKey:@"source"];
             break;
             
-        case TumblrPostTypePhotoSet:
+        case TKPostTypePhotoSet:
             // TODO implement photosets
             return;
             break;
             
-        case TumblrPostTypeQuote:
+        case TKPostTypeQuote:
             [parameters setObject:[post text] forKey:@"quote"];
             [parameters setObject:[post source] forKey:@"source"];
             break;
             
-        case TumblrPostTypeLink:
+        case TKPostTypeLink:
             [parameters setObject:[post title] forKey:@"title"];
             [parameters setObject:[post url] forKey:@"url"];
             [parameters setObject:[post body] forKey:@"description"];
             break;
             
-        case TumblrPostTypeChat:
+        case TKPostTypeChat:
             [parameters setObject:[post title] forKey:@"title"];
             // TODO dialogue
             break;
             
-        case TumblrPostTypeAudio:
+        case TKPostTypeAudio:
             [parameters setObject:[post caption] forKey:@"caption"];
             [parameters setObject:[post url] forKey:@"external_url"];
             break;
             
-        case TumblrPostTypeVideo:
+        case TKPostTypeVideo:
             [parameters setObject:[post caption] forKey:@"caption"];
             [parameters setObject:[post url] forKey:@"embed"];
             break;

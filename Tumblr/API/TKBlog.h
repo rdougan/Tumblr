@@ -9,10 +9,10 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class User;
-@class Post;
+@class TKUser;
+@class TKPost;
 
-@interface Blog : SSRemoteManagedObject
+@interface TKBlog : SSRemoteManagedObject
 
 @property (nonatomic, retain) NSString *body;
 @property (nonatomic, retain) NSNumber *postsCount;
@@ -26,16 +26,16 @@
 @property (nonatomic, retain) NSNumber *askAnon;
 @property (nonatomic, retain) NSNumber *admin;
 @property (nonatomic, retain) NSDate *updatedAt;
-@property (nonatomic, retain) User *user;
+@property (nonatomic, retain) TKUser *user;
 @property (nonatomic, retain) NSSet *posts;
 
 - (NSString *)hostname;
 
 @end
 
-@interface Blog (CoreDataGeneratedAccessors)
-- (void)addPostsObject:(Post *)value;
-- (void)removePostsObject:(Post *)value;
+@interface TKBlog (CoreDataGeneratedAccessors)
+- (void)addPostsObject:(TKPost *)value;
+- (void)removePostsObject:(TKPost *)value;
 - (void)addPosts:(NSSet *)values;
 - (void)removePosts:(NSSet *)values;
 @end

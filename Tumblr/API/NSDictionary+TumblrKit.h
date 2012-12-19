@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSDictionary (CheddarKit)
+@interface NSDictionary (TumblrKit)
 
 - (id)safeObjectForKey:(id)key;
 

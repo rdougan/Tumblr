@@ -6,11 +6,10 @@
 //  Copyright (c) 2012 Robert Dougan. All rights reserved.
 //
 
-#import "Blog.h"
-#import "User.h"
+#import "TKBlog.h"
+#import "TKUser.h"
 
-
-@implementation Blog
+@implementation TKBlog
 
 @dynamic body;
 @dynamic postsCount;

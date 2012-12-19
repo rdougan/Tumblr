@@ -9,10 +9,10 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Blog;
+@class TKBlog;
 @class Photo;
 
-@interface Post : SSRemoteManagedObject
+@interface TKPost : SSRemoteManagedObject
 
 @property (nonatomic, retain) NSNumber *type;
 @property (nonatomic, retain) NSString *blogName;
@@ -25,8 +25,8 @@
 @property (nonatomic, retain) NSString *state;
 @property (nonatomic, retain) NSNumber *liked;
 @property (nonatomic, retain) NSDate *createdAt;
-@property (nonatomic, retain) Blog *blog;
-@property (nonatomic, retain) User *user;
+@property (nonatomic, retain) TKBlog *blog;
+@property (nonatomic, retain) TKUser *user;
 
 // Text
 @property (nonatomic, retain) NSString *title;

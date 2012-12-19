@@ -6,10 +6,10 @@
 //  Copyright (c) 2012 Robert Dougan. All rights reserved.
 //
 
-#import "Post.h"
-#import "Blog.h"
+#import "TKPost.h"
+#import "TKBlog.h"
 
-@implementation Post
+@implementation TKPost
 
 @dynamic type;
 @dynamic blogName;
@@ -73,21 +73,21 @@
     
     NSString *type = [dictionary objectForKey:@"type"];
     if ([type isEqualToString:@"text"]) {
-        self.type = [NSNumber numberWithEntityType:TumblrPostTypeText];
+        self.type = [NSNumber numberWithEntityType:TKPostTypeText];
     } else if ([type isEqualToString:@"photo"]) {
-        self.type = [NSNumber numberWithEntityType:TumblrPostTypePhoto];
+        self.type = [NSNumber numberWithEntityType:TKPostTypePhoto];
     } else if ([type isEqualToString:@"quote"]) {
-        self.type = [NSNumber numberWithEntityType:TumblrPostTypeQuote];
+        self.type = [NSNumber numberWithEntityType:TKPostTypeQuote];
     } else if ([type isEqualToString:@"link"]) {
-        self.type = [NSNumber numberWithEntityType:TumblrPostTypeLink];
+        self.type = [NSNumber numberWithEntityType:TKPostTypeLink];
     } else if ([type isEqualToString:@"chat"]) {
-        self.type = [NSNumber numberWithEntityType:TumblrPostTypeChat];
+        self.type = [NSNumber numberWithEntityType:TKPostTypeChat];
     } else if ([type isEqualToString:@"audio"]) {
-        self.type = [NSNumber numberWithEntityType:TumblrPostTypeAudio];
+        self.type = [NSNumber numberWithEntityType:TKPostTypeAudio];
     } else if ([type isEqualToString:@"video"]) {
-        self.type = [NSNumber numberWithEntityType:TumblrPostTypeVideo];
+        self.type = [NSNumber numberWithEntityType:TKPostTypeVideo];
     } else if ([type isEqualToString:@"answer"]) {
-        self.type = [NSNumber numberWithEntityType:TumblrPostTypeAnswer];
+        self.type = [NSNumber numberWithEntityType:TKPostTypeAnswer];
     }
     
     // TODO photoset type should be set to 2 when it is photoset
@@ -96,37 +96,57 @@
     
     // Detect Type
     switch ([self.type entityTypeValue]) {
-        case TumblrPostTypeText:
+        case TKPostTypeText:
+        {
             self.title = [dictionary safeObjectForKey:@"title"];
             self.body = [dictionary safeObjectForKey:@"body"];
-            break;
+        }
+        break;
             
-        case TumblrPostTypePhoto:
-        case TumblrPostTypePhotoSet:
+        case TKPostTypePhoto:
+        case TKPostTypePhotoSet:
+        {
             // TODO photos
             self.caption = [dictionary safeObjectForKey:@"caption"];
             self.width = [dictionary safeObjectForKey:@"width"];
             self.height = [dictionary safeObjectForKey:@"height"];
-            break;
+        }
+        break;
             
-        case TumblrPostTypeQuote:
+        case TKPostTypeQuote:
+        {
             self.text = [dictionary safeObjectForKey:@"text"];
             self.source = [dictionary safeObjectForKey:@"source"];
-            break;
+        }
+        break;
             
-        case TumblrPostTypeLink:
+        case TKPostTypeLink:
+        {
             self.title = [dictionary safeObjectForKey:@"title"];
             self.url = [dictionary safeObjectForKey:@"url"];
             self.body = [dictionary safeObjectForKey:@"body"];
-            break;
+        }
+        break;
             
-        case TumblrPostTypeChat:
+        case TKPostTypeChat:
+        {
             self.title = [dictionary safeObjectForKey:@"title"];
             self.body = [dictionary safeObjectForKey:@"body"];
-            // TODO dialogue
-            break;
             
-        case TumblrPostTypeAudio:
+            [self setDialogue:nil];
+            
+            NSArray *dialogue = [dictionary valueForKeyPath:@"dialogue"];
+            for (NSDictionary *chatDictionary in dialogue) {
+                NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:chatDictionary];
+                [dictionary setObject:[NSString stringWithFormat:@"%i", [dialogue indexOfObject:chatDictionary]] forKey:@"remoteID"];
+				TKChat *chat = [TKChat objectWithDictionary:chatDictionary];
+				chat.post = self;
+			}
+        }
+        break;
+            
+        case TKPostTypeAudio:
+        {
             self.caption = [dictionary safeObjectForKey:@"caption"];
             self.url = [dictionary safeObjectForKey:@"url"];
             self.plays = [NSNumber numberWithInt:[[dictionary safeObjectForKey:@"plays"] intValue]];
@@ -136,41 +156,46 @@
             self.trackName = [dictionary safeObjectForKey:@"track_name"];
             self.trackNumber = [NSNumber numberWithInt:[[dictionary safeObjectForKey:@"track_number"] intValue]];
             self.year = [NSNumber numberWithInt:[[dictionary safeObjectForKey:@"year"] intValue]];
-            break;
+        }
+        break;
             
-        case TumblrPostTypeVideo:
+        case TKPostTypeVideo:
+        {
             self.caption = [dictionary safeObjectForKey:@"caption"];
             self.url = [dictionary safeObjectForKey:@"url"];
-            break;
+        }
+        break;
             
-        case TumblrPostTypeAnswer:
+        case TKPostTypeAnswer:
+        {
             self.askingName = [dictionary safeObjectForKey:@"asking_name"];
             self.askingURL = [dictionary safeObjectForKey:@"asking_url"];
             self.question = [dictionary safeObjectForKey:@"question"];
             self.answer = [dictionary safeObjectForKey:@"answer"];
-            break;
+        }
+        break;
         
         default:
-            break;
+        break;
     }
 }
 
 #pragma mark - Getters
 
-- (TumblrPostType)typeRaw
+- (TKPostType)typeRaw
 {
-    return (TumblrPostType)[[self type] intValue];
+    return (TKPostType)[[self type] intValue];
 }
 
 #pragma mark - Setters
 
--(void)setTypeRaw:(TumblrPostType)typeRaw
+-(void)setTypeRaw:(TKPostType)typeRaw
 {
     [self setTypeRaw:[[NSNumber numberWithInt:typeRaw] intValue]];
 }
 
 - (void)createWithSuccess:(void(^)(void))success failure:(void(^)(AFJSONRequestOperation *remoteOperation, NSError *error))failure {
-    [[TumblrHTTPClient sharedClient] savePost:self forBlog:[self blog] success:^(AFJSONRequestOperation *operation, id responseObject) {
+    [[TKHTTPClient sharedClient] savePost:self forBlog:[self blog] success:^(AFJSONRequestOperation *operation, id responseObject) {
         if (success) {
             success();
         }

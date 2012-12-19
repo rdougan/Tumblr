@@ -6,18 +6,18 @@
 //  Copyright (c) 2012 Robert Dougan. All rights reserved.
 //
 
-#import "NSNumber+PostType.h"
+#import "NSNumber+TumblrKit.h"
 
-@implementation NSNumber (PostType)
+@implementation NSNumber (TumblrKit)
 
-- (TumblrPostType)entityTypeValue
+- (TKPostType)entityTypeValue
 {
     int intValue = [self intValue];
     NSAssert(intValue >= 0 && intValue <= 8, @"unsupported entity type");
-    return (TumblrPostType)intValue;
+    return (TKPostType)intValue;
 }
 
-+ (NSNumber *)numberWithEntityType:(TumblrPostType)entityType
++ (NSNumber *)numberWithEntityType:(TKPostType)entityType
 {
     return [NSNumber numberWithInt:(int)entityType];
 }
@@ -25,31 +25,31 @@
 - (NSString *)stringTypeValue
 {
     switch ([self entityTypeValue]) {
-        case TumblrPostTypeText:
+        case TKPostTypeText:
             return @"text";
             break;
             
-        case TumblrPostTypePhoto:
+        case TKPostTypePhoto:
             return @"photo";
             break;
             
-        case TumblrPostTypeQuote:
+        case TKPostTypeQuote:
             return @"quote";
             break;
             
-        case TumblrPostTypeLink:
+        case TKPostTypeLink:
             return @"link";
             break;
             
-        case TumblrPostTypeChat:
+        case TKPostTypeChat:
             return @"chat";
             break;
             
-        case TumblrPostTypeAudio:
+        case TKPostTypeAudio:
             return @"audio";
             break;
             
-        case TumblrPostTypeVideo:
+        case TKPostTypeVideo:
             return @"video";
             break;
             

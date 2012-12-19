@@ -26,7 +26,7 @@
 {
     self = [super initWithStyle:style];
     if (self) {
-        [[NSNotificationCenter defaultCenter] addObserverForName:kTumblrCurrentUserChangedNotificationName object:nil queue:nil usingBlock:^(NSNotification *note) {
+        [[NSNotificationCenter defaultCenter] addObserverForName:kTKCurrentUserChangedNotificationName object:nil queue:nil usingBlock:^(NSNotification *note) {
             [self userChanged];
         }];
     }
@@ -58,18 +58,20 @@
 
 - (void)userChanged
 {    
-    if ([User currentUser]) {
+    if ([TKUser currentUser]) {
         if (!_logoutButton) {
             _logoutButton = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(logout:)];
         }
         
         [self.navigationItem setLeftBarButtonItem:_logoutButton];
+        [[self.navigationItem rightBarButtonItem] setEnabled:YES];
     } else {
         if (!_loginButton) {
             _loginButton = [[UIBarButtonItem alloc] initWithTitle:@"Login" style:UIBarButtonItemStylePlain target:self action:@selector(login:)];
         }
         
         [self.navigationItem setLeftBarButtonItem:_loginButton];
+        [[self.navigationItem rightBarButtonItem] setEnabled:NO];
     }
     
     [self reloadData];
@@ -77,12 +79,12 @@
 
 - (void)login:(id)sender
 {
-    [[TumblrHTTPClient sharedClient] login];
+    [[TKHTTPClient sharedClient] login];
 }
 
 - (void)logout:(id)sender
 {
-    [[TumblrHTTPClient sharedClient] logout];
+    [[TKHTTPClient sharedClient] logout];
 }
 
 #pragma mark - Data
@@ -95,9 +97,9 @@
 //        NSLog(@"Error updating user info: %@", error);
 //    }];
     
-    Blog *blog = [Blog objectWithRemoteID:@"thumblrapp"];
+    TKBlog *blog = [TKBlog objectWithRemoteID:@"thumblrapp"];
     
-    Post *post = [[Post alloc] init];
+    TKPost *post = [[TKPost alloc] init];
     [post setTitle:@"testing"];
     [post setBody:@"well hello there"];
     [post setBlog:blog];
@@ -117,9 +119,9 @@
     
     [_data removeAllObjects];
     
-    User *user = [User currentUser];
+    TKUser *user = [TKUser currentUser];
     
-    if ([User currentUser]) {
+    if ([TKUser currentUser]) {
         [_data addObject:@{@"title" : @"Name", @"detail" : [user name]}];
         [_data addObject:@{@"title" : @"Following", @"detail" : [NSString stringWithFormat:@"%@", [user following]]}];
         [_data addObject:@{@"title" : @"Likes", @"detail" : [NSString stringWithFormat:@"%@", [user likes]]}];
@@ -133,7 +135,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if ([User currentUser]) {
+    if ([TKUser currentUser]) {
         return 3;
     }
     return 1;
@@ -141,13 +143,13 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if ([User currentUser]) {
+    if ([TKUser currentUser]) {
         if (section == 0) {
             return [_data count];
         } else if (section == 1) {
             return 1;
         } else {
-            return [[[User currentUser] blogs] count];
+            return [[[TKUser currentUser] blogs] count];
         }
     }
     return 0;
@@ -159,7 +161,7 @@
     int row = [indexPath indexAtPosition:1];
     
     static NSString *CellIdentifier;
-    if (![User currentUser]) {
+    if (![TKUser currentUser]) {
         CellIdentifier = @"LoggedOutRow";
     } else if (section == 0) {
         CellIdentifier = @"DataRow";
@@ -169,7 +171,7 @@
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        if (![User currentUser]) {
+        if (![TKUser currentUser]) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         } else if (section == 0) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:CellIdentifier];
@@ -186,8 +188,8 @@
     } else if (section == 1) {
         [[cell textLabel] setText:@"Dashboard"];
     } else {
-        NSArray *blogs = [[[User currentUser] blogs] allObjects];
-        Blog *item = [blogs objectAtIndex:row];
+        NSArray *blogs = [[[TKUser currentUser] blogs] allObjects];
+        TKBlog *item = [blogs objectAtIndex:row];
         
         [[cell textLabel] setText:[item title]];
         [[cell detailTextLabel] setText:[item remoteID]];
@@ -216,10 +218,10 @@
     
     UITableViewController *viewController;
     if (section == 1) {
-        viewController = (UITableViewController *)[[TumblrDashboardViewController alloc] initWithRemoteID:[[User currentUser] remoteID]];
+        viewController = (UITableViewController *)[[TumblrDashboardViewController alloc] initWithRemoteID:[[TKUser currentUser] remoteID]];
     } else {
-        NSArray *blogs = [[[User currentUser] blogs] allObjects];
-        Blog *item = [blogs objectAtIndex:[indexPath indexAtPosition:1]];
+        NSArray *blogs = [[[TKUser currentUser] blogs] allObjects];
+        TKBlog *item = [blogs objectAtIndex:[indexPath indexAtPosition:1]];
         
         viewController = (UITableViewController *)[[TumblrBlogViewController alloc] initWithRemoteID:[item remoteID]];
     }
@@ -229,7 +231,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    if (![User currentUser]) {
+    if (![TKUser currentUser]) {
         return @"Please login to view Tumblr content.";
     }
     return nil;

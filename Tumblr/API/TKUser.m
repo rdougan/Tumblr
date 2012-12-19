@@ -6,12 +6,12 @@
 //  Copyright (c) 2012 Robert Dougan. All rights reserved.
 //
 
-#import "User.h"
+#import "TKUser.h"
 
-static NSString *const kCDKUserIDKey = @"CDKUserID";
-static User *__currentUser = nil;
+static NSString *const kTKUserIDKey = @"TKUserID";
+static TKUser *__currentUser = nil;
 
-@implementation User
+@implementation TKUser
 
 @dynamic following;
 @dynamic likes;
@@ -22,18 +22,18 @@ static User *__currentUser = nil;
 @synthesize accessToken = _accessToken;
 
 + (NSString *)entityName {
-	return @"User";
+	return @"TKUser";
 }
 
-+ (User *)currentUser {
++ (TKUser *)currentUser {
 	if (!__currentUser) {
 		NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-		NSString *userID = [userDefaults objectForKey:kCDKUserIDKey];
+		NSString *userID = [userDefaults objectForKey:kTKUserIDKey];
 		if (!userID) {
 			return nil;
 		}
 		
-		NSString *accessToken = [SSKeychain passwordForService:kTumblrKeychainServiceName account:userID.description];
+		NSString *accessToken = [SSKeychain passwordForService:kTKKeychainServiceName account:userID.description];
 		if (!accessToken) {
 			return nil;
 		}
@@ -44,10 +44,9 @@ static User *__currentUser = nil;
 	return __currentUser;
 }
 
-
-+ (void)setCurrentUser:(User *)user {
++ (void)setCurrentUser:(TKUser *)user {
 	if (__currentUser) {
-		[SSKeychain deletePasswordForService:kTumblrKeychainServiceName account:__currentUser.remoteID.description];
+		[SSKeychain deletePasswordForService:kTKKeychainServiceName account:__currentUser.remoteID.description];
 	}
 	
 	if (!user.remoteID || !user.accessToken) {
@@ -55,19 +54,19 @@ static User *__currentUser = nil;
             [__currentUser delete];
         }
 		__currentUser = nil;
-        [[NSNotificationCenter defaultCenter] postNotificationName:kTumblrCurrentUserChangedNotificationName object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kTKCurrentUserChangedNotificationName object:nil];
 		return;
 	}
 	
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	[userDefaults setObject:user.remoteID forKey:kCDKUserIDKey];
+	[userDefaults setObject:user.remoteID forKey:kTKUserIDKey];
 	[userDefaults synchronize];
 	
-	[SSKeychain setPassword:user.accessToken forService:kTumblrKeychainServiceName account:user.remoteID.description];
+	[SSKeychain setPassword:user.accessToken forService:kTKKeychainServiceName account:user.remoteID.description];
 	
 	__currentUser = user;
 	
-	[[NSNotificationCenter defaultCenter] postNotificationName:kTumblrCurrentUserChangedNotificationName object:user];
+	[[NSNotificationCenter defaultCenter] postNotificationName:kTKCurrentUserChangedNotificationName object:user];
 }
 
 - (void)unpackDictionary:(NSDictionary *)dictionary {
@@ -81,7 +80,7 @@ static User *__currentUser = nil;
     [self.blogs makeObjectsPerformSelector:@selector(delete)];
     
     for (NSDictionary *blogDictionary in [dictionary objectForKey:@"blogs"]) {
-		Blog *blog = [Blog objectWithDictionary:blogDictionary context:self.managedObjectContext];
+		TKBlog *blog = [TKBlog objectWithDictionary:blogDictionary context:self.managedObjectContext];
 		blog.user = self;
 	}
 }
@@ -90,7 +89,7 @@ static User *__currentUser = nil;
 
 - (void)updateInfoWithSuccess:(void(^)(void))success failure:(void(^)(void))failure
 {
-    [[TumblrHTTPClient sharedClient] updateUserInfo:self success:^(AFJSONRequestOperation *operation, id responseObject) {
+    [[TKHTTPClient sharedClient] updateUserInfo:self success:^(AFJSONRequestOperation *operation, id responseObject) {
         if (success) {
             success();
         }

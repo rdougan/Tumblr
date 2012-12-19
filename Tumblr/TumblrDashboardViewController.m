@@ -13,7 +13,7 @@
 @end
 
 @implementation TumblrDashboardViewController {
-    User *_user;
+    TKUser *_user;
 }
 
 - (id)initWithRemoteID:(NSString *)remoteID
@@ -21,7 +21,7 @@
     self = [super initWithStyle:UITableViewStyleGrouped];
     if (self) {
         // find the user
-        _user = [User objectWithRemoteID:remoteID];
+        _user = [TKUser objectWithRemoteID:remoteID];
     }
     return self;
 }
@@ -47,7 +47,7 @@
 
 - (void)fetchPosts
 {
-    [[TumblrHTTPClient sharedClient] dashboardForUser:_user offset:self.loadOffset success:^(AFJSONRequestOperation *operation, id responseObject) {
+    [[TKHTTPClient sharedClient] dashboardForUser:_user offset:self.loadOffset success:^(AFJSONRequestOperation *operation, id responseObject) {
         self.loadOffset = self.loadOffset + 20;
         self.loadingPosts = NO;
 

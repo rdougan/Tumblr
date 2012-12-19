@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 Robert Dougan. All rights reserved.
 //
 
-#import "NSDictionary+CheddarKit.h"
+#import "NSDictionary+TumblrKit.h"
 
-@implementation NSDictionary (CheddarKit)
+@implementation NSDictionary (TumblrKit)
 
 - (id)safeObjectForKey:(id)key {
 	id value = [self valueForKey:key];

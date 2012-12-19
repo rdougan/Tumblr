@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1811" systemVersion="12C3012" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
-    <entity name="Blog" representedClassName="Blog" syncable="YES">
+    <entity name="TKBlog" representedClassName="TKBlog" syncable="YES">
         <attribute name="admin" optional="YES" attributeType="Boolean" defaultValueString="0.0" syncable="YES"/>
         <attribute name="ask" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="askAnon" optional="YES" attributeType="Boolean" syncable="YES"/>
@@ -14,28 +14,29 @@
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="posts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Post" inverseName="blog" inverseEntity="Post" syncable="YES"/>
-        <relationship name="user" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="blogs" inverseEntity="User" syncable="YES"/>
+        <relationship name="posts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TKPost" inverseName="blog" inverseEntity="TKPost" syncable="YES"/>
+        <relationship name="user" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="TKUser" inverseName="blogs" inverseEntity="TKUser" syncable="YES"/>
     </entity>
-    <entity name="Chat" syncable="YES">
+    <entity name="TKChat" representedClassName="TKChat" syncable="YES">
         <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="phrase" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="post" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Post" inverseName="dialogue" inverseEntity="Post" syncable="YES"/>
+        <attribute name="remoteID" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="post" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="TKPost" inverseName="dialogue" inverseEntity="TKPost" syncable="YES"/>
     </entity>
-    <entity name="Photo" syncable="YES">
+    <entity name="TKPhoto" representedClassName="TKPhoto" syncable="YES">
         <attribute name="height" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="width" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <relationship name="photoSet" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="PhotoSet" inverseName="photos" inverseEntity="PhotoSet" syncable="YES"/>
+        <relationship name="photoSet" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="TKPhotoSet" inverseName="photos" inverseEntity="TKPhotoSet" syncable="YES"/>
     </entity>
-    <entity name="PhotoSet" syncable="YES">
+    <entity name="TKPhotoSet" representedClassName="TKPhotoSet" syncable="YES">
         <attribute name="attribute" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="caption" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="photos" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Photo" inverseName="photoSet" inverseEntity="Photo" syncable="YES"/>
-        <relationship name="post" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Post" inverseName="photoSets" inverseEntity="Post" syncable="YES"/>
+        <relationship name="photos" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TKPhoto" inverseName="photoSet" inverseEntity="TKPhoto" syncable="YES"/>
+        <relationship name="post" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="TKPost" inverseName="photoSets" inverseEntity="TKPost" syncable="YES"/>
     </entity>
-    <entity name="Post" representedClassName="Post" syncable="YES">
+    <entity name="TKPost" representedClassName="TKPost" syncable="YES">
         <attribute name="album" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="albumArt" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="answer" optional="YES" attributeType="String" syncable="YES"/>
@@ -68,19 +69,19 @@
         <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="width" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="year" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <relationship name="blog" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Blog" inverseName="posts" inverseEntity="Blog" syncable="YES"/>
-        <relationship name="dialogue" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Chat" inverseName="post" inverseEntity="Chat" syncable="YES"/>
-        <relationship name="photoSets" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="PhotoSet" inverseName="post" inverseEntity="PhotoSet" syncable="YES"/>
-        <relationship name="user" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="posts" inverseEntity="User" syncable="YES"/>
+        <relationship name="blog" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="TKBlog" inverseName="posts" inverseEntity="TKBlog" syncable="YES"/>
+        <relationship name="dialogue" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TKChat" inverseName="post" inverseEntity="TKChat" syncable="YES"/>
+        <relationship name="photoSets" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TKPhotoSet" inverseName="post" inverseEntity="TKPhotoSet" syncable="YES"/>
+        <relationship name="user" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="TKUser" inverseName="posts" inverseEntity="TKUser" syncable="YES"/>
     </entity>
-    <entity name="User" representedClassName="User" syncable="YES">
+    <entity name="TKUser" representedClassName="TKUser" syncable="YES">
         <attribute name="defaultPostFormat" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="following" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="likes" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="remoteID" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="blogs" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Blog" inverseName="user" inverseEntity="Blog" syncable="YES"/>
-        <relationship name="posts" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Post" inverseName="user" inverseEntity="Post" syncable="YES"/>
+        <relationship name="blogs" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TKBlog" inverseName="user" inverseEntity="TKBlog" syncable="YES"/>
+        <relationship name="posts" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TKPost" inverseName="user" inverseEntity="TKPost" syncable="YES"/>
         <compoundIndexes>
             <compoundIndex>
                 <index value="name"/>
@@ -91,11 +92,11 @@
         </compoundIndexes>
     </entity>
     <elements>
-        <element name="Blog" positionX="160" positionY="192" width="128" height="270"/>
-        <element name="Chat" positionX="160" positionY="192" width="128" height="105"/>
-        <element name="Photo" positionX="160" positionY="192" width="128" height="105"/>
-        <element name="PhotoSet" positionX="160" positionY="192" width="128" height="105"/>
-        <element name="Post" positionX="160" positionY="192" width="128" height="585"/>
-        <element name="User" positionX="160" positionY="192" width="128" height="150"/>
+        <element name="TKChat" positionX="0" positionY="0" width="128" height="120"/>
+        <element name="TKPhoto" positionX="0" positionY="0" width="128" height="105"/>
+        <element name="TKPhotoSet" positionX="0" positionY="0" width="128" height="105"/>
+        <element name="TKBlog" positionX="0" positionY="0" width="128" height="270"/>
+        <element name="TKPost" positionX="0" positionY="0" width="128" height="585"/>
+        <element name="TKUser" positionX="0" positionY="0" width="128" height="150"/>
     </elements>
 </model>

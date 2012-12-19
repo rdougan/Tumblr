@@ -8,6 +8,9 @@
 
 #import "TumblrPostsViewController.h"
 
+#import "TumblrPostCell.h"
+#import "TumblrPostTextCell.h"
+
 @interface TumblrPostsViewController ()
 
 @end
@@ -87,7 +90,7 @@
 #pragma mark - SSManagedViewController
 
 - (Class)entityClass {
-	return [Post class];
+	return [TKPost class];
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -106,52 +109,56 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    Post *post = [self objectForViewIndexPath:indexPath];
+    TKPost *post = [self objectForViewIndexPath:indexPath];
     
     NSString *CellIdentifier = [NSString stringWithFormat:@"PostCell%@", [post type]];
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        cell = [self cellForPostType:[[post type] entityTypeValue] reuseIdentifier:CellIdentifier];
     }
     
     switch ([[post type] entityTypeValue]) {
-        case TumblrPostTypeText:
+        case TKPostTypeText:
             [[cell textLabel] setText:[post title]];
             [[cell detailTextLabel] setText:@"Text"];
             break;
             
-        case TumblrPostTypePhoto:
+        case TKPostTypePhoto:
             [[cell textLabel] setText:[post caption]];
             [[cell detailTextLabel] setText:@"Photo"];
             break;
             
-        case TumblrPostTypePhotoSet:
+        case TKPostTypePhotoSet:
             [[cell detailTextLabel] setText:@"PhotoSet"];
             break;
             
-        case TumblrPostTypeQuote:
+        case TKPostTypeQuote:
             [[cell textLabel] setText:[post text]];
             [[cell detailTextLabel] setText:@"Quote"];
             break;
             
-        case TumblrPostTypeLink:
+        case TKPostTypeLink:
             [[cell detailTextLabel] setText:@"Link"];
             break;
             
-        case TumblrPostTypeChat:
+        case TKPostTypeChat:
             [[cell detailTextLabel] setText:@"Chat"];
+            
+            NSLog(@"post:\n%i", [[post dialogue] count]);
+            
             break;
             
-        case TumblrPostTypeAudio:
+        case TKPostTypeAudio:
             [[cell detailTextLabel] setText:@"Audio"];
             break;
             
-        case TumblrPostTypeVideo:
+        case TKPostTypeVideo:
             [[cell detailTextLabel] setText:@"Video"];
             break;
             
-        case TumblrPostTypeAnswer:
+        case TKPostTypeAnswer:
             [[cell detailTextLabel] setText:@"Answer"];
             break;
             
@@ -163,5 +170,63 @@
     
     return cell;
 }
+
+- (UITableViewCell *)cellForPostType:(TKPostType)type reuseIdentifier:(NSString *)reuseIdentifier
+{
+    switch (type) {
+        case TKPostTypeText:
+            return [[TumblrPostTextCell alloc] initWithReuseIdentifier:reuseIdentifier];
+            break;
+            
+        case TKPostTypePhoto:
+            return [[TumblrPostCell alloc] initWithReuseIdentifier:reuseIdentifier];
+            break;
+            
+        case TKPostTypePhotoSet:
+            return [[TumblrPostCell alloc] initWithReuseIdentifier:reuseIdentifier];
+            break;
+            
+        case TKPostTypeQuote:
+            return [[TumblrPostCell alloc] initWithReuseIdentifier:reuseIdentifier];
+            break;
+            
+        case TKPostTypeLink:
+            return [[TumblrPostCell alloc] initWithReuseIdentifier:reuseIdentifier];
+            break;
+            
+        case TKPostTypeChat:
+            return [[TumblrPostCell alloc] initWithReuseIdentifier:reuseIdentifier];
+            break;
+            
+        case TKPostTypeAudio:
+            return [[TumblrPostCell alloc] initWithReuseIdentifier:reuseIdentifier];
+            break;
+            
+        case TKPostTypeVideo:
+            return [[TumblrPostCell alloc] initWithReuseIdentifier:reuseIdentifier];
+            break;
+            
+        case TKPostTypeAnswer:
+            return [[TumblrPostCell alloc] initWithReuseIdentifier:reuseIdentifier];
+            break;
+            
+        default:
+            break;
+    }
+    
+    return nil;
+}
+
+#pragma mark - UITableViewDelegate
+
+//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    TumblrPostCell *cell = (TumblrPostCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+//    if (cell) {
+//        return [cell height];
+//    }
+//    
+//    return 44.0;
+//}
 
 @end

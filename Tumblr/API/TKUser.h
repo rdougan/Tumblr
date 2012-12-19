@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@interface User : SSRemoteManagedObject
+@interface TKUser : SSRemoteManagedObject
 
 @property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) NSNumber *following;
@@ -20,16 +20,16 @@
 
 @property (nonatomic, strong) NSString *accessToken;
 
-+ (User *)currentUser;
-+ (void)setCurrentUser:(User *)user;
++ (TKUser *)currentUser;
++ (void)setCurrentUser:(TKUser *)user;
 
 - (void)updateInfoWithSuccess:(void(^)(void))success failure:(void(^)(void))failure;
 
 @end
 
-@interface User (CoreDataGeneratedAccessors)
-- (void)addBlogsObject:(Blog *)value;
-- (void)removeBlogsObject:(Blog *)value;
+@interface TKUser (CoreDataGeneratedAccessors)
+- (void)addBlogsObject:(TKBlog *)value;
+- (void)removeBlogsObject:(TKBlog *)value;
 - (void)addBlogs:(NSSet *)values;
 - (void)removeBlogs:(NSSet *)values;
 @end

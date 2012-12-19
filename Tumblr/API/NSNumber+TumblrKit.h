@@ -8,10 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSNumber (PostType)
+@interface NSNumber (TumblrKit)
 
-- (TumblrPostType)entityTypeValue;
-+ (NSNumber *)numberWithEntityType:(TumblrPostType)entityType;
+- (TKPostType)entityTypeValue;
++ (NSNumber *)numberWithEntityType:(TKPostType)entityType;
 - (NSString *)stringTypeValue;
 
 @end

@@ -15,7 +15,7 @@
 @end
 
 @implementation TumblrBlogViewController {
-    Blog *_blog;
+    TKBlog *_blog;
 }
 
 - (id)initWithRemoteID:(NSString *)remoteID
@@ -23,7 +23,7 @@
     self = [super initWithStyle:UITableViewStyleGrouped];
     if (self) {
         // find the blog
-        _blog = [Blog objectWithRemoteID:remoteID];
+        _blog = [TKBlog objectWithRemoteID:remoteID];
     }
     return self;
 }
@@ -48,7 +48,7 @@
 
 - (void)fetchPosts
 {
-    [[TumblrHTTPClient sharedClient] postsForBlog:_blog offset:self.loadOffset success:^(AFJSONRequestOperation *operation, id responseObject) {
+    [[TKHTTPClient sharedClient] postsForBlog:_blog offset:self.loadOffset success:^(AFJSONRequestOperation *operation, id responseObject) {
         self.loadOffset = self.loadOffset + 20;
         self.loadingPosts = NO;
         
