@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 29
+/svn/!svn/ver/67/trunk/Source
+END
+GTMOAuthAuthentication.m
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/67/trunk/Source/GTMOAuthAuthentication.m
+END
+UnitTests-Info.plist
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/11/trunk/Source/UnitTests-Info.plist
+END
+GTMOAuthSignIn.h
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/65/trunk/Source/GTMOAuthSignIn.h
+END
+ReleaseNotes.txt
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/65/trunk/Source/ReleaseNotes.txt
+END
+GTMOAuth.framework-Info.plist
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/11/trunk/Source/GTMOAuth.framework-Info.plist
+END
+GTMOAuthSignIn.m
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/65/trunk/Source/GTMOAuthSignIn.m
+END
+GTMOAuthAuthentication.h
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/65/trunk/Source/GTMOAuthAuthentication.h
+END

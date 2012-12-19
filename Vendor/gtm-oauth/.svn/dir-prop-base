@@ -1,0 +1,7 @@
+K 13
+svn:externals
+V 69
+HTTPFetcher http://gtm-http-fetcher.googlecode.com/svn/trunk/Source
+
+
+END
