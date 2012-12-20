@@ -86,7 +86,10 @@
 @property (nonatomic, retain) NSString *answer;
 
 - (BOOL)isReblogged;
+- (BOOL)isLiked;
 
 - (void)createWithSuccess:(void(^)(void))success failure:(void(^)(AFJSONRequestOperation *remoteOperation, NSError *error))failure;
+
+- (void)toggleLikedWithSuccess:(TumblrHTTPClientSuccess)success failure:(TumblrHTTPClientFailure)failure;
 
 @end

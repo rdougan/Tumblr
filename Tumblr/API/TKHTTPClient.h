@@ -38,6 +38,13 @@ typedef void (^TumblrHTTPClientFailure)(AFJSONRequestOperation *operation, NSErr
 - (void)postsForBlog:(TKBlog *)blog success:(TumblrHTTPClientSuccess)success failure:(TumblrHTTPClientFailure)failure;
 - (void)postsForBlog:(TKBlog *)blog offset:(int)offset success:(TumblrHTTPClientSuccess)success failure:(TumblrHTTPClientFailure)failure;
 
+#pragma mark - Posts
+
 - (void)savePost:(TKPost *)post forBlog:(TKBlog *)blog success:(TumblrHTTPClientSuccess)success failure:(TumblrHTTPClientFailure)failure;
+
+- (void)likePost:(TKPost *)post success:(TumblrHTTPClientSuccess)success failure:(TumblrHTTPClientFailure)failure;
+- (void)unlikePost:(TKPost *)post success:(TumblrHTTPClientSuccess)success failure:(TumblrHTTPClientFailure)failure;
+
+- (void)reblogPost:(TKPost *)post blog:(TKBlog *)blog comment:(NSString *)comment success:(TumblrHTTPClientSuccess)success failure:(TumblrHTTPClientFailure)failure;
 
 @end

@@ -274,6 +274,8 @@
     }];
 }
 
+#pragma mark - Posts
+
 - (void)savePost:(TKPost *)post forBlog:(TKBlog *)blog parameters:(NSDictionary *)parameters success:(TumblrHTTPClientSuccess)success failure:(TumblrHTTPClientFailure)failure
 {
     NSString *path = [NSString stringWithFormat:@"blog/%@/post", [blog hostname]];
@@ -349,6 +351,67 @@
     }
     
     [self savePost:post forBlog:blog parameters:parameters success:success failure:failure];
+}
+
+- (void)likePost:(TKPost *)post success:(TumblrHTTPClientSuccess)success failure:(TumblrHTTPClientFailure)failure
+{
+    NSDictionary *parameters = @{@"id" : [post remoteID], @"reblog_key" : [post reblogKey]};
+    
+    [self postPath:@"user/like" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        __weak NSManagedObjectContext *context = [TKPost mainContext];
+        [context performBlockAndWait:^{
+			[post setLiked:[NSNumber numberWithBool:YES]];
+			[post save];
+		}];
+        
+        if (success) {
+            success((AFJSONRequestOperation *)operation, responseObject);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (failure) {
+            failure((AFJSONRequestOperation *)operation, error);
+        }
+    }];
+}
+
+- (void)unlikePost:(TKPost *)post success:(TumblrHTTPClientSuccess)success failure:(TumblrHTTPClientFailure)failure
+{
+    NSDictionary *parameters = @{@"id" : [post remoteID], @"reblog_key" : [post reblogKey]};
+    
+    [self postPath:@"user/unlike" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        __weak NSManagedObjectContext *context = [TKPost mainContext];
+        [context performBlockAndWait:^{
+			[post setLiked:[NSNumber numberWithBool:NO]];
+			[post save];
+		}];
+        
+        if (success) {
+            success((AFJSONRequestOperation *)operation, responseObject);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (failure) {
+            failure((AFJSONRequestOperation *)operation, error);
+        }
+    }];
+}
+
+- (void)reblogPost:(TKPost *)post blog:(TKBlog *)blog comment:(NSString *)comment success:(TumblrHTTPClientSuccess)success failure:(TumblrHTTPClientFailure)failure
+{
+    NSString *path = [NSString stringWithFormat:@"blog/%@/post/reblog", [blog hostname]];
+    
+    NSDictionary *parameters = @{@"id" : [post remoteID], @"reblog_key" : [post reblogKey], @"comment" : comment};
+    
+    [self postPath:path parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        
+        if (success) {
+            success((AFJSONRequestOperation *)operation, responseObject);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (failure) {
+            failure((AFJSONRequestOperation *)operation, error);
+        }
+    }];
 }
 
 @end

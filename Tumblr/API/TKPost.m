@@ -205,6 +205,11 @@
     return (self.rebloggedFromName && ![self.rebloggedFromName isEqualToString:@""]);
 }
 
+- (BOOL)isLiked
+{
+    return [self.liked boolValue];
+}
+
 #pragma mark - Getters
 
 - (TKPostType)typeRaw
@@ -225,6 +230,15 @@
             success();
         }
     } failure:failure];
+}
+
+- (void)toggleLikedWithSuccess:(TumblrHTTPClientSuccess)success failure:(TumblrHTTPClientFailure)failure
+{
+    if ([self isLiked]) {
+        [[TKHTTPClient sharedClient] unlikePost:self success:success failure:failure];
+    } else {
+        [[TKHTTPClient sharedClient] likePost:self success:success failure:failure];
+    }
 }
 
 @end
