@@ -21,6 +21,7 @@
 
 @implementation TumblrTableViewController {
     NSMutableArray *_data;
+    NSArray *_blogsArray;
     
     UIBarButtonItem *_loginButton;
     UIBarButtonItem *_logoutButton;
@@ -117,6 +118,11 @@
         [_data addObject:@{@"title" : @"Following", @"detail" : [NSString stringWithFormat:@"%@", [user followingCount]]}];
         [_data addObject:@{@"title" : @"Likes", @"detail" : [NSString stringWithFormat:@"%@", [user likesCount]]}];
         [_data addObject:@{@"title" : @"Access Token", @"detail" : [user accessToken]}];
+        
+        NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"url" ascending:YES];
+        _blogsArray = [[[[TKUser currentUser] blogs] allObjects] sortedArrayUsingDescriptors:[NSArray arrayWithObject:sort]];
+    } else {
+        _blogsArray = [NSArray array];
     }
     
     [self.tableView reloadData];
@@ -140,7 +146,7 @@
         } else if (section == 1) {
             return 2;
         } else if (section == 2) {
-            return [[[TKUser currentUser] blogs] count];
+            return [_blogsArray count];
         } else if (section == 3) {
             return 8;
         }
@@ -192,8 +198,7 @@
                 break;
         }
     } else if (section == 2) {
-        NSArray *blogs = [[[TKUser currentUser] blogs] allObjects];
-        TKBlog *item = [blogs objectAtIndex:row];
+        TKBlog *item = [_blogsArray objectAtIndex:row];
         
         [[cell textLabel] setText:[item title]];
         [[cell detailTextLabel] setText:[item remoteID]];
@@ -239,8 +244,7 @@
                 break;
         }
     } else if (section == 2) {
-        NSArray *blogs = [[[TKUser currentUser] blogs] allObjects];
-        TKBlog *item = [blogs objectAtIndex:row];
+        TKBlog *item = [_blogsArray objectAtIndex:row];
         
         viewController = (UIViewController *)[[TumblrBlogViewController alloc] initWithRemoteID:[item remoteID]];
     } else if (section == 3) {
@@ -248,6 +252,10 @@
         NSString *className = [NSString stringWithFormat:@"TumblrCreate%@PostViewController", [type capitalizedString]];
         
         viewController = (UIViewController *)[[NSClassFromString(className) alloc] init];
+    }
+    
+    if (!viewController) {
+        return;
     }
     
     if (section == 3) {
