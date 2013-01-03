@@ -9,7 +9,6 @@
 #import "TKPhotoSize.h"
 #import "TKPhoto.h"
 
-
 @implementation TKPhotoSize
 
 @dynamic height;

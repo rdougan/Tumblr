@@ -14,7 +14,20 @@
 @property (nonatomic, retain) UILabel *rebloggedNameLabel;
 @property (nonatomic, retain) UIButton *likeButton;
 @property (nonatomic, retain) UIButton *reblogButton;
+@property (nonatomic, retain) DTAttributedTextContentView *bodyView;
 
-- (void)setPost:(TKPost *)post;
+@property (nonatomic, retain) TKPost *post;
+
+#pragma mark - Sizing helpers
+
++ (CGFloat)heightForPost:(TKPost *)post;
++ (CGFloat)heightForPost:(TKPost *)post key:(NSString *)key;
+
+#pragma mark - Content helpers
+
++ (NSAttributedString *)attributedStringForPost:(TKPost *)post key:(NSString *)key;
++ (NSDictionary *)optionsDictionaryForPost:(TKPost *)post key:(NSString *)key;
+
+- (void)didEndDisplaying;
 
 @end

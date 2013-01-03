@@ -17,6 +17,7 @@
     #import "AFNetworking.h"
     #import "SSDataKit.h"
     #import "SSKeychain.h"
+    #import "DTCoreText.h"
 
     #import "TumblrKit.h"
 #endif

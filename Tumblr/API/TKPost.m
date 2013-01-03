@@ -28,6 +28,8 @@
 @dynamic dashboardUser;
 @dynamic likedUser;
 
+@dynamic cellHeight;
+
 @dynamic rebloggedFromId;
 @dynamic rebloggedFromName;
 @dynamic rebloggedFromTitle;
@@ -39,7 +41,7 @@
 @dynamic title;
 @dynamic url;
 @dynamic body;
-@dynamic photos;
+@dynamic photoSet;
 @dynamic caption;
 @dynamic width;
 @dynamic height;
@@ -110,6 +112,8 @@
         self.type = [NSNumber numberWithEntityType:TKPostTypeAnswer];
     }
     
+    self.body = [dictionary safeObjectForKey:@"body"];
+    
     // TODO photoset type should be set to 2 when it is photoset
     // TODO tags
     // self.tags = [dictionary safeObjectForKey:@"tags"];
@@ -119,14 +123,47 @@
         case TKPostTypeText:
         {
             self.title = [dictionary safeObjectForKey:@"title"];
-            self.body = [dictionary safeObjectForKey:@"body"];
         }
         break;
             
         case TKPostTypePhoto:
         case TKPostTypePhotoSet:
         {
-            // TODO photos
+            if (!self.photoSet) {
+                self.photoSet = [[TKPhotoSet alloc] init];
+                self.photoSet.post = self;
+                
+                // Original image
+                NSArray *photos = [dictionary objectForKey:@"photos"];
+                
+                if ([photos count] == 9) {
+                    NSLog(@"photos: %@", photos);
+                }
+                
+                for (NSDictionary *photoDictionary in photos) {
+                    TKPhoto *photo = [[TKPhoto alloc] init];
+                    photo.width = [photoDictionary valueForKeyPath:@"original_size.width"];
+                    photo.height = [photoDictionary valueForKeyPath:@"original_size.height"];
+                    photo.url = [photoDictionary valueForKeyPath:@"original_size.url"];
+                    photo.caption = [photoDictionary valueForKeyPath:@"caption"];
+                    photo.photoSet = self.photoSet;
+                    photo.sortID = [NSNumber numberWithInt:[photos indexOfObject:photoDictionary]];
+                    
+                    for (NSDictionary *sizeDictionary in [photoDictionary valueForKeyPath:@"alt_sizes"]) {
+                        TKPhotoSize *size = [[TKPhotoSize alloc] init];
+                        size.url = [sizeDictionary valueForKeyPath:@"url"];
+                        size.width = [sizeDictionary valueForKeyPath:@"width"];
+                        size.height = [sizeDictionary valueForKeyPath:@"height"];
+                        size.photo = photo;
+                    }
+                }
+            }
+            
+            if ([dictionary safeObjectForKey:@"photoset_layout"]) {
+                self.type = [NSNumber numberWithEntityType:TKPostTypePhotoSet];
+                self.photoSet.layout = [NSNumber numberWithInt:[[dictionary safeObjectForKey:@"photoset_layout"] intValue]];
+            }
+            
             self.caption = [dictionary safeObjectForKey:@"caption"];
             self.width = [dictionary safeObjectForKey:@"width"];
             self.height = [dictionary safeObjectForKey:@"height"];

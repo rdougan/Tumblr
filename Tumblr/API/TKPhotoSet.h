@@ -15,8 +15,15 @@
 
 @property (nonatomic, retain) NSString *attribute;
 @property (nonatomic, retain) NSString *caption;
+@property (nonatomic, retain) NSNumber *layout;
 @property (nonatomic, retain) NSSet *photos;
 @property (nonatomic, retain) TKPost *post;
+@property (nonatomic, retain) TKPhoto *firstPhoto;
+
+- (NSArray *)sortedPhotos;
+- (NSDictionary *)layoutInformation;
+- (NSDictionary *)frameInformationForWidth:(CGFloat)width spacing:(CGFloat)spacing;
+
 @end
 
 @interface TKPhotoSet (CoreDataGeneratedAccessors)

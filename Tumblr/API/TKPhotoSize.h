@@ -11,7 +11,7 @@
 
 @class TKPhoto;
 
-@interface TKPhotoSize : NSManagedObject
+@interface TKPhotoSize : SSRemoteManagedObject
 
 @property (nonatomic, retain) NSNumber * height;
 @property (nonatomic, retain) NSNumber * width;

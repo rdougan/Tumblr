@@ -10,7 +10,7 @@
 #import <CoreData/CoreData.h>
 
 @class TKBlog;
-@class Photo;
+@class TKPhotoSet;
 
 @interface TKPost : SSRemoteManagedObject
 
@@ -31,6 +31,9 @@
 @property (nonatomic, retain) TKUser *dashboardUser;
 @property (nonatomic, retain) TKUser *likedUser;
 
+// View information
+@property (nonatomic, retain) NSNumber *cellHeight;
+
 // Reblogged information
 @property (nonatomic, retain) NSNumber *rebloggedFromId;
 @property (nonatomic, retain) NSString *rebloggedFromName;
@@ -45,7 +48,7 @@
 @property (nonatomic, retain) NSString *body;
 
 // Photo/PhotoSet
-@property (nonatomic, retain) NSSet *photos;
+@property (nonatomic, retain) TKPhotoSet *photoSet;
 @property (nonatomic, retain) NSString *caption;
 @property (nonatomic, retain) NSNumber *width;
 @property (nonatomic, retain) NSNumber *height;

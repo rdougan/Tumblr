@@ -13,9 +13,14 @@
 
 @interface TKPhoto : SSRemoteManagedObject
 
+@property (nonatomic, retain) NSNumber *sortID;
 @property (nonatomic, retain) NSNumber *height;
 @property (nonatomic, retain) NSString *url;
 @property (nonatomic, retain) NSNumber *width;
+@property (nonatomic, retain) NSString *caption;
 @property (nonatomic, retain) TKPhotoSet *photoSet;
+@property (nonatomic, retain) NSSet *sizes;
+
+- (TKPhotoSize *)closestSizeForWidth:(CGFloat)width;
 
 @end

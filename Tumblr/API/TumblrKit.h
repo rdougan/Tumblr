@@ -52,6 +52,7 @@ typedef enum {
 #import "NSDictionary+TumblrKit.h"
 
 // Models
+#import "TKPhotoSize.h"
 #import "TKPhoto.h"
 #import "TKPhotoSet.h"
 #import "TKChat.h"

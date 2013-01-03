@@ -9,7 +9,7 @@
         <attribute name="postsCount" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="primary" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="queue" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="remoteID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="remoteID" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
@@ -22,20 +22,30 @@
         <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="phrase" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="remoteID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="remoteID" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <relationship name="post" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="TKPost" inverseName="dialogue" inverseEntity="TKPost" syncable="YES"/>
     </entity>
     <entity name="TKPhoto" representedClassName="TKPhoto" syncable="YES">
+        <attribute name="caption" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="height" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sortID" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="url" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="width" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <relationship name="photoSet" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="TKPhotoSet" inverseName="photos" inverseEntity="TKPhotoSet" syncable="YES"/>
+        <relationship name="sizes" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TKPhotoSize" inverseName="photo" inverseEntity="TKPhotoSize" syncable="YES"/>
     </entity>
     <entity name="TKPhotoSet" representedClassName="TKPhotoSet" syncable="YES">
         <attribute name="attribute" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="caption" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="layout" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <relationship name="photos" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TKPhoto" inverseName="photoSet" inverseEntity="TKPhoto" syncable="YES"/>
-        <relationship name="post" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="TKPost" inverseName="photoSets" inverseEntity="TKPost" syncable="YES"/>
+        <relationship name="post" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="TKPost" inverseName="photoSet" inverseEntity="TKPost" syncable="YES"/>
+    </entity>
+    <entity name="TKPhotoSize" representedClassName="TKPhotoSize" syncable="YES">
+        <attribute name="height" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="url" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="width" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <relationship name="photo" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="TKPhoto" inverseName="sizes" inverseEntity="TKPhoto" syncable="YES"/>
     </entity>
     <entity name="TKPost" representedClassName="TKPost" syncable="YES">
         <attribute name="album" optional="YES" attributeType="String" syncable="YES"/>
@@ -47,6 +57,7 @@
         <attribute name="blogName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="body" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="caption" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="cellHeight" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="format" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="height" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
@@ -62,7 +73,7 @@
         <attribute name="rebloggedRootTitle" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="rebloggedRootURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="reblogKey" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="remoteID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="remoteID" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="source" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="sourceTitle" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="sourceURL" optional="YES" attributeType="String" syncable="YES"/>
@@ -81,7 +92,7 @@
         <relationship name="dashboardUser" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="TKUser" inverseName="dashboard" inverseEntity="TKUser" syncable="YES"/>
         <relationship name="dialogue" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TKChat" inverseName="post" inverseEntity="TKChat" syncable="YES"/>
         <relationship name="likedUser" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="TKUser" inverseName="likes" inverseEntity="TKUser" syncable="YES"/>
-        <relationship name="photoSets" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TKPhotoSet" inverseName="post" inverseEntity="TKPhotoSet" syncable="YES"/>
+        <relationship name="photoSet" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="TKPhotoSet" inverseName="post" inverseEntity="TKPhotoSet" syncable="YES"/>
         <relationship name="user" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="TKUser" inverseName="posts" inverseEntity="TKUser" syncable="YES"/>
     </entity>
     <entity name="TKUser" representedClassName="TKUser" syncable="YES">
@@ -89,7 +100,7 @@
         <attribute name="followingCount" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="likesCount" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="remoteID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="remoteID" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <relationship name="blogs" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TKBlog" inverseName="user" inverseEntity="TKBlog" syncable="YES"/>
         <relationship name="dashboard" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TKPost" inverseName="dashboardUser" inverseEntity="TKPost" syncable="YES"/>
         <relationship name="following" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TKBlog" inverseName="followedUser" inverseEntity="TKBlog" syncable="YES"/>
@@ -107,9 +118,10 @@
     <elements>
         <element name="TKBlog" positionX="0" positionY="0" width="128" height="285"/>
         <element name="TKChat" positionX="0" positionY="0" width="128" height="120"/>
-        <element name="TKPhoto" positionX="0" positionY="0" width="128" height="105"/>
-        <element name="TKPhotoSet" positionX="0" positionY="0" width="128" height="105"/>
-        <element name="TKPost" positionX="0" positionY="0" width="128" height="720"/>
+        <element name="TKPhoto" positionX="0" positionY="0" width="128" height="150"/>
+        <element name="TKPhotoSet" positionX="0" positionY="0" width="128" height="120"/>
+        <element name="TKPhotoSize" positionX="160" positionY="192" width="128" height="105"/>
+        <element name="TKPost" positionX="0" positionY="0" width="128" height="735"/>
         <element name="TKUser" positionX="0" positionY="0" width="128" height="195"/>
     </elements>
 </model>

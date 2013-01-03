@@ -9,6 +9,9 @@
 #import "TumblrPostsCollectionViewController.h"
 
 #import "TumblrPostCollectionViewCell.h"
+#import "TumblrTextPostCollectionViewCell.h"
+#import "TumblrPhotoPostCollectionViewCell.h"
+#import "TumblrPhotoSetPostCollectionViewCell.h"
 
 @interface TumblrPostsCollectionViewController ()
 
@@ -33,9 +36,9 @@
     [self.collectionView setShowsVerticalScrollIndicator:NO];
     
     // Collection view cell classes
-    [self.collectionView registerClass:[TumblrPostCollectionViewCell class] forCellWithReuseIdentifier:@"CellText"];
-    [self.collectionView registerClass:[TumblrPostCollectionViewCell class] forCellWithReuseIdentifier:@"CellPhoto"];
-    [self.collectionView registerClass:[TumblrPostCollectionViewCell class] forCellWithReuseIdentifier:@"CellPhotoSet"];
+    [self.collectionView registerClass:[TumblrTextPostCollectionViewCell class] forCellWithReuseIdentifier:@"CellText"];
+    [self.collectionView registerClass:[TumblrPhotoPostCollectionViewCell class] forCellWithReuseIdentifier:@"CellPhoto"];
+    [self.collectionView registerClass:[TumblrPhotoSetPostCollectionViewCell class] forCellWithReuseIdentifier:@"CellPhotoset"];
     [self.collectionView registerClass:[TumblrPostCollectionViewCell class] forCellWithReuseIdentifier:@"CellQuote"];
     [self.collectionView registerClass:[TumblrPostCollectionViewCell class] forCellWithReuseIdentifier:@"CellLink"];
     [self.collectionView registerClass:[TumblrPostCollectionViewCell class] forCellWithReuseIdentifier:@"CellChat"];
@@ -101,6 +104,24 @@
     }
 }
 
+- (CGFloat)cellHeightForPost:(TKPost *)post
+{
+    switch ([[post type] entityTypeValue]) {
+        case TKPostTypePhoto:
+            return [TumblrPhotoPostCollectionViewCell heightForPost:post];
+            break;
+        
+        case TKPostTypePhotoSet:
+            return [TumblrPhotoSetPostCollectionViewCell heightForPost:post];
+            break;
+            
+        default:
+            break;
+    }
+    
+    return [TumblrTextPostCollectionViewCell heightForPost:post];
+}
+
 #pragma mark - SSManagedViewController
 
 - (Class)entityClass {
@@ -133,11 +154,34 @@
     return cell;
 }
 
+#pragma mark - UICollectionViewDelegate
+
+- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (cell && [cell respondsToSelector:@selector(didEndDisplaying)]) {
+        [cell performSelector:@selector(didEndDisplaying)];
+    }
+}
+
 #pragma mark - UICollectionViewDelegateFlowLayout
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return CGSizeMake(600.0, 600.0f);
+    // TODO this is a huge bottleneck, especially on first load
+    // TODO sometimes the view is blank. check if thesize is always returned here
+    
+    CGFloat height = 0;
+    
+    TKPost *post = [self objectForViewIndexPath:indexPath];
+    NSNumber *cachedHeight = [post cellHeight];
+    if (!cachedHeight || [cachedHeight isEqualToNumber:[NSNumber numberWithFloat:0]]) {
+        height = [self cellHeightForPost:[self objectForViewIndexPath:indexPath]];
+        [post setCellHeight:[NSNumber numberWithFloat:height]];
+    } else {
+        height = [cachedHeight floatValue];
+    }
+    
+    return CGSizeMake(600.0, height);
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
