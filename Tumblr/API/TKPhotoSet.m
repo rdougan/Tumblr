@@ -149,7 +149,7 @@
                 NSDictionary *frame = @{
                     @"width" : [NSNumber numberWithFloat:lroundf(photoWidth * ratio)],
                     @"height" : [NSNumber numberWithFloat:rowHeight],
-                    @"x" : [NSNumber numberWithFloat:lroundf(([[obj valueForKey:@"x"] floatValue] * ratio) + (spacing * photosIndex) + 10.0f)],
+                    @"x" : [NSNumber numberWithFloat:lroundf(([[obj valueForKey:@"x"] floatValue] * ratio) + (spacing * photosIndex))],
                     @"y" : [NSNumber numberWithFloat:lroundf(currentY)]
                 };
                 
