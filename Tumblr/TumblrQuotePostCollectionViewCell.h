@@ -10,4 +10,7 @@
 
 @interface TumblrQuotePostCollectionViewCell : TumblrPostCollectionViewCell
 
+@property (nonatomic, retain) UILabel *quoteLabel;
+@property (nonatomic, retain) UILabel *sourceLabel;
+
 @end

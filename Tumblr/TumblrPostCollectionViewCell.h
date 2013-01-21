@@ -14,7 +14,7 @@
 @property (nonatomic, retain) UILabel *rebloggedNameLabel;
 @property (nonatomic, retain) UIButton *likeButton;
 @property (nonatomic, retain) UIButton *reblogButton;
-@property (nonatomic, retain) DTAttributedTextContentView *bodyView;
+@property (nonatomic, retain) UIWebView *bodyView;
 
 @property (nonatomic, retain) TKPost *post;
 
@@ -25,6 +25,7 @@
 
 #pragma mark - Content helpers
 
++ (NSString *)stringForPost:(TKPost *)post key:(NSString *)key;
 + (NSAttributedString *)attributedStringForPost:(TKPost *)post key:(NSString *)key;
 + (NSDictionary *)optionsDictionaryForPost:(TKPost *)post key:(NSString *)key;
 

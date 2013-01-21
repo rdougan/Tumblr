@@ -10,6 +10,8 @@
 
 #import "TumblrPostCollectionViewCell.h"
 #import "TumblrTextPostCollectionViewCell.h"
+#import "TumblrQuotePostCollectionViewCell.h"
+#import "TumblrVideoPostCollectionViewCell.h"
 #import "TumblrPhotoPostCollectionViewCell.h"
 #import "TumblrPhotoSetPostCollectionViewCell.h"
 
@@ -39,11 +41,11 @@
     [self.collectionView registerClass:[TumblrTextPostCollectionViewCell class] forCellWithReuseIdentifier:@"CellText"];
     [self.collectionView registerClass:[TumblrPhotoPostCollectionViewCell class] forCellWithReuseIdentifier:@"CellPhoto"];
     [self.collectionView registerClass:[TumblrPhotoSetPostCollectionViewCell class] forCellWithReuseIdentifier:@"CellPhotoset"];
-    [self.collectionView registerClass:[TumblrPostCollectionViewCell class] forCellWithReuseIdentifier:@"CellQuote"];
+    [self.collectionView registerClass:[TumblrQuotePostCollectionViewCell class] forCellWithReuseIdentifier:@"CellQuote"];
     [self.collectionView registerClass:[TumblrPostCollectionViewCell class] forCellWithReuseIdentifier:@"CellLink"];
     [self.collectionView registerClass:[TumblrPostCollectionViewCell class] forCellWithReuseIdentifier:@"CellChat"];
     [self.collectionView registerClass:[TumblrPostCollectionViewCell class] forCellWithReuseIdentifier:@"CellAudio"];
-    [self.collectionView registerClass:[TumblrPostCollectionViewCell class] forCellWithReuseIdentifier:@"CellVideo"];
+    [self.collectionView registerClass:[TumblrVideoPostCollectionViewCell class] forCellWithReuseIdentifier:@"CellVideo"];
     [self.collectionView registerClass:[TumblrPostCollectionViewCell class] forCellWithReuseIdentifier:@"CellAnswer"];
     
     // Refresh button
@@ -107,6 +109,14 @@
 - (CGFloat)cellHeightForPost:(TKPost *)post
 {
     switch ([[post type] entityTypeValue]) {
+        case TKPostTypeQuote:
+            return [TumblrQuotePostCollectionViewCell heightForPost:post];
+            break;
+            
+        case TKPostTypeVideo:
+            return [TumblrVideoPostCollectionViewCell heightForPost:post];
+            break;
+            
         case TKPostTypePhoto:
             return [TumblrPhotoPostCollectionViewCell heightForPost:post];
             break;
@@ -167,19 +177,19 @@
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    // TODO this is a huge bottleneck, especially on first load
-    // TODO sometimes the view is blank. check if thesize is always returned here
-    
     CGFloat height = 0;
     
     TKPost *post = [self objectForViewIndexPath:indexPath];
-    NSNumber *cachedHeight = [post cellHeight];
-    if (!cachedHeight || [cachedHeight isEqualToNumber:[NSNumber numberWithFloat:0]]) {
-        height = [self cellHeightForPost:[self objectForViewIndexPath:indexPath]];
-        [post setCellHeight:[NSNumber numberWithFloat:height]];
-    } else {
-        height = [cachedHeight floatValue];
-    }
+    
+    // TODO put this back when in production
+    
+//    NSNumber *cachedHeight = [post cellHeight];
+//    if (!cachedHeight || [cachedHeight isEqualToNumber:[NSNumber numberWithFloat:0]]) {
+        height = [self cellHeightForPost:post];
+//        [post setCellHeight:[NSNumber numberWithFloat:height]];
+//    } else {
+//        height = [cachedHeight floatValue];
+//    }
     
     return CGSizeMake(600.0, height);
 }

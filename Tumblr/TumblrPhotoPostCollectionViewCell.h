@@ -10,7 +10,7 @@
 
 @interface TumblrPhotoPostCollectionViewCell : TumblrPostCollectionViewCell
 
-@property (nonatomic, retain) UIImageView *imageView;
+@property (nonatomic, retain) OLImageView *imageView;
 
 + (CGFloat)imageHeightForPhoto:(TKPhoto *)photo;
 + (CGFloat)imageHeightForPhoto:(TKPhoto *)photo width:(float)width;

@@ -10,4 +10,11 @@
 
 @implementation TumblrTextPostCollectionViewCell
 
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    
+}
+
 @end
