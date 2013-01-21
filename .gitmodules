@@ -1,3 +1,0 @@
-[submodule "Vendor/SSDataKit"]
-	path = Vendor/SSDataKit
-	url = git://github.com/rdougan/ssdatakit.git
