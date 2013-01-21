@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TumblrTableViewController : UITableViewController
+@interface TumblrTableViewController : UITableViewController <UIGestureRecognizerDelegate>
 
 @end

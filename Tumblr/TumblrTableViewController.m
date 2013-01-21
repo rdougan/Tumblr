@@ -15,10 +15,6 @@
 #import "TumblrCreatePostViewController.h"
 #import "TumblrCreateTextPostViewController.h"
 
-@interface TumblrTableViewController ()
-
-@end
-
 @implementation TumblrTableViewController {
     NSMutableArray *_data;
     NSArray *_blogsArray;
