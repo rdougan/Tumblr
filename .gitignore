@@ -112,4 +112,5 @@ xcuserdata
 #
 # ...none. Everything is now explained.
 
+Podfile.lock
 Pods/

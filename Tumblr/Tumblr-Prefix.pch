@@ -14,10 +14,14 @@
     #import <CoreData/CoreData.h>
     #import <QuartzCore/QuartzCore.h>
     #import <SystemConfiguration/SystemConfiguration.h>
+
+    // Vendor
     #import "AFNetworking.h"
     #import "SSDataKit.h"
     #import "SSKeychain.h"
     #import "DTCoreText.h"
+    #import "OLImageView.h"
 
+    // App
     #import "TumblrKit.h"
 #endif
