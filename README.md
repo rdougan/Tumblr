@@ -24,7 +24,12 @@ I originally started working on this app over 3 years ago - back when I had no i
 	* quotes
 	
 	The other types will require some more work, but I believe photosets is the most difficult as you must calculate the positioning of each photo in the set.
-	
+
+## What use is this code to you?
+
+* You could design and finish the app if you wanted. THe bulk of the app is already here, so it just needs to be finished.
+* Use the app as a guide on how to make real world applications. When learning Objective-C, I found it hard to find real world code or applications to use as a reference.
+
 ## The current UI
 
 I was planning on designing the UI with my beautiful wife [https://twitter.com/mrsdougan](Sarah Dougan), but of course that was also stopped because of the launch of the offical app.
@@ -46,3 +51,9 @@ The current UI is merely a demo of the functionality of the API.
 #### Create Post View
 
 ![create post](http://f.cl.ly/items/073U0x1B3z2v3O3V2Q1p/Screen%20Shot%202013-01-21%20at%2010.52.36%20PM.png)
+
+## Licence
+
+This code is released under the [Simplified BSD License](https://github.com/rdougan/Tumblr/blob/master/LICENCE).
+
+If you do happen to use the code, do let me know!
