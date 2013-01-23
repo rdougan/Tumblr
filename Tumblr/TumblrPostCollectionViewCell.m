@@ -63,23 +63,13 @@ bodyView = _bodyView;
 
 + (CGFloat)heightForPost:(TKPost *)post key:(NSString *)key
 {
-    NSString *string = [self stringForPost:post key:key];
+    NSAttributedString *attributedString = [self attributedStringForPost:post key:key];
     
     // TODO dont create this every time
-    CGRect frame = CGRectMake(0, 0, 580.0f, 100.0f);
-    UIWebView *webview = [[UIWebView alloc] initWithFrame:frame];
-    [webview loadHTMLString:string baseURL:nil];
+    DTAttributedTextContentView *view = [[DTAttributedTextContentView alloc] initWithAttributedString:attributedString width:580.0f];
+    CGSize size = [view sizeThatFits:CGSizeMake(580.0f, 3000.0f)];
     
-    NSString *output = [webview stringByEvaluatingJavaScriptFromString:@"document.body.scrollHeight;"];
-
-    NSLog(@"output:%@", output);
-    
-//    CGFloat height = lroundf(size.height);
-//    if (height > 0) {
-//        height = height;
-//    }
-    
-    return 0;
+    return size.height;
 }
 
 #pragma mark - Content helpers

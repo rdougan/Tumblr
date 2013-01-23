@@ -70,48 +70,93 @@
         [_layoutInformation removeAllObjects];
     }
     
+    NSArray *sortedPhotos = [self sortedPhotos];
+    int sortedPhotosCount = [[self sortedPhotos] count];
     NSMutableArray *rows = [NSMutableArray array];
     NSString *layoutString = [NSString stringWithFormat:@"%@", self.layout];
     int totalCount = 0;
+    int totalLayoutCount = 0;
     CGFloat y = 0;
     CGFloat width = 0;
+    BOOL layoutPossible = YES;
     unsigned int len = [layoutString length];
     unichar buffer[len + 1];
     [layoutString getCharacters:buffer range:NSMakeRange(0, len)];
     
+    // If the total number of photoset photos required for this layout is more than the actual photo count,
+    // we can't lay it out properly
+    // This exists for the following post:
+    //   http://el-amor-de-tu-dia.tumblr.com/post/41262495464/diggydre-best-dad-everr
+    // Layout is 27591, which is a total of 24 photos - but we only have 9 photos.
+    // fuck knows why.
     for (int row = 0; row < len; ++row) {
         int rowCount = [[NSString stringWithFormat:@"%c", buffer[row]] intValue];
-        CGFloat rowX = 0;
-        CGFloat rowWidth = 0;
-        NSMutableArray *rowPhotos = [NSMutableArray array];
-        NSNumber *rowHeight = [NSNumber numberWithInt:0];
-        
-        for (int i = 0; i < rowCount; i++) {
-            TKPhoto *photo = [[self sortedPhotos] objectAtIndex:totalCount];
+        totalLayoutCount = totalLayoutCount + rowCount;
+    }
+    
+    if (totalLayoutCount > sortedPhotosCount) {
+        layoutPossible = NO;
+    }
+    
+    // If we can do the layout, do it.
+    if (layoutPossible) {
+        for (int row = 0; row < len; ++row) {
+            int rowCount = [[NSString stringWithFormat:@"%c", buffer[row]] intValue];
+            CGFloat rowX = 0;
+            CGFloat rowWidth = 0;
+            NSMutableArray *rowPhotos = [NSMutableArray array];
+            NSNumber *rowHeight = [NSNumber numberWithInt:0];
+            
+            for (int i = 0; i < rowCount; i++) {
+                TKPhoto *photo = [sortedPhotos objectAtIndex:totalCount];
+                
+                [rowPhotos addObject:@{
+                    @"width" : [photo width],
+                    @"height" : [photo height],
+                    @"x" : [NSNumber numberWithFloat:rowX],
+                    @"y" : [NSNumber numberWithFloat:y]
+                }];
+                
+                rowHeight = [photo height];
+                
+                rowWidth = rowWidth + [[photo width] floatValue];
+                
+                totalCount = totalCount + 1;
+                rowX = rowX + [[photo width] floatValue];
+            }
+            
+            [rows addObject:@{
+                @"photos" : rowPhotos,
+                @"height" : rowHeight,
+                @"width" : [NSNumber numberWithFloat:rowWidth]
+            }];
+            
+            y = y + [rowHeight floatValue];
+            width = MAX(width, rowWidth);
+        }
+    } else {
+        // if not, just lay them out the full width
+        for (int i = 0; i < sortedPhotosCount; i++) {
+            NSMutableArray *rowPhotos = [NSMutableArray array];
+            TKPhoto *photo = [sortedPhotos objectAtIndex:i];
+            NSNumber *rowHeight = [photo height];
+            NSNumber *rowWidth = [photo width];
             
             [rowPhotos addObject:@{
                 @"width" : [photo width],
                 @"height" : [photo height],
-                @"x" : [NSNumber numberWithFloat:rowX],
+                @"x" : [NSNumber numberWithInt:0],
                 @"y" : [NSNumber numberWithFloat:y]
             }];
             
-            rowHeight = [photo height];
+            [rows addObject:@{
+                @"photos" : rowPhotos,
+                @"height" : rowHeight,
+                @"width" : rowWidth
+            }];
             
-            rowWidth = rowWidth + [[photo width] floatValue];
-            
-            totalCount = totalCount + 1;
-            rowX = rowX + [[photo width] floatValue];
+            y = y + [rowHeight floatValue];
         }
-        
-        [rows addObject:@{
-            @"photos" : rowPhotos,
-            @"height" : rowHeight,
-            @"width" : [NSNumber numberWithFloat:rowWidth]
-        }];
-        
-        y = y + [rowHeight floatValue];
-        width = MAX(width, rowWidth);
     }
     
     [_layoutInformation setObject:rows forKey:@"rows"];

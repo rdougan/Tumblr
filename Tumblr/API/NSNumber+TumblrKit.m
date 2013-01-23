@@ -56,6 +56,10 @@
         case TKPostTypeVideo:
             return @"video";
             break;
+        
+        case TKPostTypeAnswer:
+            return @"answer";
+            break;
             
         default:
             return nil;

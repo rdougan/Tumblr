@@ -45,7 +45,7 @@
     [self.collectionView registerClass:[TumblrPostCollectionViewCell class] forCellWithReuseIdentifier:@"CellLink"];
     [self.collectionView registerClass:[TumblrPostCollectionViewCell class] forCellWithReuseIdentifier:@"CellChat"];
     [self.collectionView registerClass:[TumblrPostCollectionViewCell class] forCellWithReuseIdentifier:@"CellAudio"];
-    [self.collectionView registerClass:[TumblrVideoPostCollectionViewCell class] forCellWithReuseIdentifier:@"CellVideo"];
+    [self.collectionView registerClass:[TumblrPostCollectionViewCell class] forCellWithReuseIdentifier:@"CellVideo"];
     [self.collectionView registerClass:[TumblrPostCollectionViewCell class] forCellWithReuseIdentifier:@"CellAnswer"];
     
     // Refresh button
@@ -113,10 +113,6 @@
             return [TumblrQuotePostCollectionViewCell heightForPost:post];
             break;
             
-        case TKPostTypeVideo:
-            return [TumblrVideoPostCollectionViewCell heightForPost:post];
-            break;
-            
         case TKPostTypePhoto:
             return [TumblrPhotoPostCollectionViewCell heightForPost:post];
             break;
@@ -156,7 +152,7 @@
 {
     TKPost *post = [self objectForViewIndexPath:indexPath];
     NSString *cellIdentifier = [NSString stringWithFormat:@"Cell%@", [[[post type] stringTypeValue] capitalizedString]];
-    
+
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
     
     [(TumblrPostCollectionViewCell *)cell setPost:post];

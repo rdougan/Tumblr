@@ -15,8 +15,8 @@
 		E10D03FA168262AC00F047D5 /* TumblrCreatePostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E10D03F9168262AC00F047D5 /* TumblrCreatePostViewController.m */; };
 		E10D04001682663100F047D5 /* TumblrCreateTextPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E10D03FF1682663100F047D5 /* TumblrCreateTextPostViewController.m */; };
 		E10F330216810B7B00631564 /* TKPost.m in Sources */ = {isa = PBXBuildFile; fileRef = E10F330116810B7B00631564 /* TKPost.m */; };
+		E117953216B004FA002FF290 /* TumblrPhotoSetPostCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E117953116B004FA002FF290 /* TumblrPhotoSetPostCollectionViewCell.m */; };
 		E129ED5816850ACB0075CDB7 /* TumblrPhotoPostCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E129ED5716850ACB0075CDB7 /* TumblrPhotoPostCollectionViewCell.m */; };
-		E16E32F51685F13300E3E06C /* TumblrPhotoSetPostCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E16E32F41685F13300E3E06C /* TumblrPhotoSetPostCollectionViewCell.m */; };
 		E175171616ADEA5D0068E207 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E175171516ADEA5D0068E207 /* MobileCoreServices.framework */; };
 		E176B6EC168128E6009D13F7 /* SSManagedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E176B6E9168128E6009D13F7 /* SSManagedTableViewController.m */; };
 		E176B6ED168128E6009D13F7 /* SSManagedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E176B6EB168128E6009D13F7 /* SSManagedViewController.m */; };
@@ -78,10 +78,10 @@
 		E10D03FF1682663100F047D5 /* TumblrCreateTextPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TumblrCreateTextPostViewController.m; sourceTree = "<group>"; };
 		E10F330016810B7B00631564 /* TKPost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKPost.h; sourceTree = "<group>"; };
 		E10F330116810B7B00631564 /* TKPost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKPost.m; sourceTree = "<group>"; };
+		E117953016B004FA002FF290 /* TumblrPhotoSetPostCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TumblrPhotoSetPostCollectionViewCell.h; sourceTree = "<group>"; };
+		E117953116B004FA002FF290 /* TumblrPhotoSetPostCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TumblrPhotoSetPostCollectionViewCell.m; sourceTree = "<group>"; };
 		E129ED5616850ACB0075CDB7 /* TumblrPhotoPostCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TumblrPhotoPostCollectionViewCell.h; sourceTree = "<group>"; };
 		E129ED5716850ACB0075CDB7 /* TumblrPhotoPostCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TumblrPhotoPostCollectionViewCell.m; sourceTree = "<group>"; };
-		E16E32F31685F13300E3E06C /* TumblrPhotoSetPostCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TumblrPhotoSetPostCollectionViewCell.h; path = ../../../Documents/TumblrPhotoSetPostCollectionViewCell.h; sourceTree = "<group>"; };
-		E16E32F41685F13300E3E06C /* TumblrPhotoSetPostCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TumblrPhotoSetPostCollectionViewCell.m; path = ../../../Documents/TumblrPhotoSetPostCollectionViewCell.m; sourceTree = "<group>"; };
 		E175171516ADEA5D0068E207 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		E176B6E8168128E6009D13F7 /* SSManagedTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSManagedTableViewController.h; path = Vendor/SSDataKit/SSManagedTableViewController.h; sourceTree = SOURCE_ROOT; };
 		E176B6E9168128E6009D13F7 /* SSManagedTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSManagedTableViewController.m; path = Vendor/SSDataKit/SSManagedTableViewController.m; sourceTree = SOURCE_ROOT; };
@@ -191,8 +191,8 @@
 				E1E459F0169EFE1F00A50D57 /* TumblrVideoPostCollectionViewCell.m */,
 				E129ED5616850ACB0075CDB7 /* TumblrPhotoPostCollectionViewCell.h */,
 				E129ED5716850ACB0075CDB7 /* TumblrPhotoPostCollectionViewCell.m */,
-				E16E32F31685F13300E3E06C /* TumblrPhotoSetPostCollectionViewCell.h */,
-				E16E32F41685F13300E3E06C /* TumblrPhotoSetPostCollectionViewCell.m */,
+				E117953016B004FA002FF290 /* TumblrPhotoSetPostCollectionViewCell.h */,
+				E117953116B004FA002FF290 /* TumblrPhotoSetPostCollectionViewCell.m */,
 				E1B7D921169E15BC0018D2B4 /* OLImageView+Tumblr.h */,
 				E1B7D922169E15BC0018D2B4 /* OLImageView+Tumblr.m */,
 			);
@@ -536,11 +536,11 @@
 				E1F8281316827B7200CAC642 /* TumblrCreateChatPostViewController.m in Sources */,
 				E1F8281616827E3900CAC642 /* TumblrLikesViewController.m in Sources */,
 				E129ED5816850ACB0075CDB7 /* TumblrPhotoPostCollectionViewCell.m in Sources */,
-				E16E32F51685F13300E3E06C /* TumblrPhotoSetPostCollectionViewCell.m in Sources */,
 				E1F42C7F16867D6F00FB4D95 /* TKPhotoSize.m in Sources */,
 				E1B7D923169E15BC0018D2B4 /* OLImageView+Tumblr.m in Sources */,
 				E1E459ED169EF05800A50D57 /* TumblrQuotePostCollectionViewCell.m in Sources */,
 				E1E459F1169EFE1F00A50D57 /* TumblrVideoPostCollectionViewCell.m in Sources */,
+				E117953216B004FA002FF290 /* TumblrPhotoSetPostCollectionViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
